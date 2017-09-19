@@ -7,19 +7,27 @@ package com.project.api.utils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
 /**
  *
  * @author Kim Howel delos Reyes
  */
-public abstract class FileUtils {
+public class FileUtils {
     
-    public abstract BufferedReader getFileReader() throws IOException, FileNotFoundException;
-    public abstract BufferedWriter getFileWriter() throws IOException, FileNotFoundException;
+    public static BufferedReader getFileReader(String filename) throws IOException, FileNotFoundException {
+        return new BufferedReader(new FileReader(new File(filename)));
+    }
     
-    public String getValue(String parameter) {
+    public static BufferedWriter getFileWriter(String filename) throws IOException, FileNotFoundException {
+        return new BufferedWriter(new FileWriter(new File(filename)));
+    }
+    
+    public static String getValue(String parameter) {
         return parameter.split("=")[1];
     }
     

@@ -22,11 +22,10 @@ import java.sql.SQLException;
  *
  * @author Kim Howel delos Reyes
  */
-public class OracleConnection extends FileUtils {
+public class OracleConnection {
     
     private static Connection connection = null;
     private static ConnectionConfiguration connectionConfig = null;
-    private static OracleConnection oracleConnection;
     
     private final String CONFIG_FILE = "config.properties";
     private final String ORACLE_JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
@@ -42,23 +41,23 @@ public class OracleConnection extends FileUtils {
     }
     
     private void getConnectionParameters() throws IOException, FileNotFoundException  {
-        BufferedReader br = getFileReader();
+        BufferedReader br = FileUtils.getFileReader(CONFIG_FILE);
         String content = "";
         connectionConfig = new ConnectionConfiguration();
         
         while((content = br.readLine()) != null) {
             if(content.contains(ConfigurationConstants.CONNECTION)) {
-                connectionConfig.setConnection(getValue(content));
+                connectionConfig.setConnection(FileUtils.getValue(content));
             } else if(content.contains(ConfigurationConstants.USERNAME)) {
-                connectionConfig.setUsername(getValue(content));
+                connectionConfig.setUsername(FileUtils.getValue(content));
             } else if(content.contains(ConfigurationConstants.PASSWORD)) {
-                connectionConfig.setPassword(getValue(content));
+                connectionConfig.setPassword(FileUtils.getValue(content));
             } else if(content.contains(ConfigurationConstants.HOSTNAME)) {
-                connectionConfig.setHostname(getValue(content));
+                connectionConfig.setHostname(FileUtils.getValue(content));
             } else if(content.contains(ConfigurationConstants.PORT)) {
-                connectionConfig.setPort(getValue(content));
+                connectionConfig.setPort(FileUtils.getValue(content));
             } else if(content.contains(ConfigurationConstants.SID)) {
-                connectionConfig.setSid(getValue(content));
+                connectionConfig.setSid(FileUtils.getValue(content));
             }
         }
         
@@ -76,16 +75,6 @@ public class OracleConnection extends FileUtils {
                 System.out.println("SQLException");
             }
         }
-    }
-
-    @Override
-    public BufferedReader getFileReader() throws IOException, FileNotFoundException {
-        return new BufferedReader(new FileReader(new File(CONFIG_FILE)));
-    }
-
-    @Override
-    public BufferedWriter getFileWriter() throws IOException, FileNotFoundException {
-        return null;
     }
     
 }
