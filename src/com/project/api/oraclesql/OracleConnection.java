@@ -1,0 +1,91 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.project.api.oraclesql;
+
+import com.project.api.models.ConnectionConfiguration;
+import com.project.api.models.constants.ConfigurationConstants;
+import com.project.api.utils.FileUtils;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+/**
+ *
+ * @author Kim Howel delos Reyes
+ */
+public class OracleConnection extends FileUtils {
+    
+    private static Connection connection = null;
+    private static ConnectionConfiguration connectionConfig = null;
+    private static OracleConnection oracleConnection;
+    
+    private final String CONFIG_FILE = "config.properties";
+    private final String ORACLE_JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
+    
+    public OracleConnection() throws IOException, FileNotFoundException {
+        if(connection == null) {
+            getConnectionParameters();
+        }
+    }
+    
+    public Connection getConnection () {
+        return connection;
+    }
+    
+    private void getConnectionParameters() throws IOException, FileNotFoundException  {
+        BufferedReader br = getFileReader();
+        String content = "";
+        connectionConfig = new ConnectionConfiguration();
+        
+        while((content = br.readLine()) != null) {
+            if(content.contains(ConfigurationConstants.CONNECTION)) {
+                connectionConfig.setConnection(getValue(content));
+            } else if(content.contains(ConfigurationConstants.USERNAME)) {
+                connectionConfig.setUsername(getValue(content));
+            } else if(content.contains(ConfigurationConstants.PASSWORD)) {
+                connectionConfig.setPassword(getValue(content));
+            } else if(content.contains(ConfigurationConstants.HOSTNAME)) {
+                connectionConfig.setHostname(getValue(content));
+            } else if(content.contains(ConfigurationConstants.PORT)) {
+                connectionConfig.setPort(getValue(content));
+            } else if(content.contains(ConfigurationConstants.SID)) {
+                connectionConfig.setSid(getValue(content));
+            }
+        }
+        
+        if(connection == null) {
+            try {
+                Class.forName(ORACLE_JDBC_DRIVER);
+                connection = DriverManager.getConnection(  
+                        "jdbc:oracle:thin:@" + connectionConfig.getHostname() + ":"
+                                + connectionConfig.getPort() + ":" + connectionConfig.getSid(),
+                        connectionConfig.getUsername(),
+                        connectionConfig.getPassword()); 
+            } catch(ClassNotFoundException exc) {
+                System.out.println("ClassNotFoundException");
+            } catch(SQLException exc) {
+                System.out.println("SQLException");
+            }
+        }
+    }
+
+    @Override
+    public BufferedReader getFileReader() throws IOException, FileNotFoundException {
+        return new BufferedReader(new FileReader(new File(CONFIG_FILE)));
+    }
+
+    @Override
+    public BufferedWriter getFileWriter() throws IOException, FileNotFoundException {
+        return null;
+    }
+    
+}
