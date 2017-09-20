@@ -40,11 +40,19 @@ public class App {
     public static ArrayList<Table> getTables() {
         if (tables == null) {
             tables = new ArrayList<>();
+        } else {
+        	return tables;
         }
 
         try {
             for (String tableName : getTableFromConfig()) {
-
+            	Connection connection = getConnection();
+            	DatabaseMetaData metaData = connection.getMetaData();
+            	ResultSet rs = metaData.getTables(null,
+            			oracleConnection.getConnectionConfiguration().getSchema().getSchemaName(),
+            			"%",
+            			null);
+            	
             }
         } catch (FileNotFoundException exc) {
             System.out.println("FileNotFoundException: " + exc.getMessage());

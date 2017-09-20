@@ -40,6 +40,10 @@ public class OracleConnection {
         return connection;
     }
     
+    public static ConnectionConfiguration getConnectionConfiguration() {
+    	return connectionConfig;
+    }
+    
     private void getConnectionParameters() throws IOException, FileNotFoundException  {
         BufferedReader br = FileUtils.getFileReader(CONFIG_FILE);
         String content = "";
@@ -58,6 +62,10 @@ public class OracleConnection {
                 connectionConfig.setPort(FileUtils.getValue(content));
             } else if(content.contains(ConfigurationConstants.SID)) {
                 connectionConfig.setSid(FileUtils.getValue(content));
+            } else if(content.contains(ConfigurationConstants.SCHEMA_USERNAME)) {
+            	connectionConfig.setSchemaName(FileUtils.getValue(content));
+            } else if(content.contains(ConfigurationConstants.SCHEMA_PASSWORD)) {
+            	connectionConfig.setSchemaPassword(FileUtils.getValue(content));
             }
         }
         

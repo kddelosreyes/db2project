@@ -20,6 +20,7 @@ public class ConnectionConfiguration implements Serializable {
     private String hostname;
     private Short port;
     private String sid;
+    private Schema schema;
     
     public ConnectionConfiguration() {}
     
@@ -31,6 +32,7 @@ public class ConnectionConfiguration implements Serializable {
         this.hostname = hostname;
         this.port = port;
         this.sid = sid;
+        schema = new Schema();
     }
     
     public String getConnection() {
@@ -57,6 +59,10 @@ public class ConnectionConfiguration implements Serializable {
         return sid;
     }
     
+    public Schema getSchema() {
+    	return schema;
+    }
+    
     public void setConnection(String connection) {
         this.connection = connection;
     }
@@ -81,14 +87,24 @@ public class ConnectionConfiguration implements Serializable {
         this.sid = sid;
     }
     
+    public void setSchemaName(String schemaName) {
+    	schema.setSchemaName(schemaName);
+    }
+    
+    public void setSchemaPassword(String schemaPassword) {
+    	schema.setPassword(schemaPassword);
+    }
+    
     @Override
     public String toString() {
         return ConfigurationConstants.CONNECTION + ":" + getConnection() + ";" +
                 ConfigurationConstants.USERNAME + ":" + getUsername() + ";" + 
                 ConfigurationConstants.PASSWORD + ":" + getPassword() + ";" +
-                ConfigurationConstants.HOSTNAME + ":" + getHostname()+ ";" +
-                ConfigurationConstants.PORT + ":" + getPort()+ ";" +
-                ConfigurationConstants.SID + ":" + getSid();
+                ConfigurationConstants.HOSTNAME + ":" + getHostname() + ";" +
+                ConfigurationConstants.PORT + ":" + getPort() + ";" +
+                ConfigurationConstants.SID + ":" + getSid() + ";" +
+                ConfigurationConstants.SCHEMA_USERNAME + ":" + getSchema().getSchemaName() + ";" +
+                ConfigurationConstants.SCHEMA_PASSWORD + ":" + getSchema().getPassword() + ";" +;
     }
     
 }

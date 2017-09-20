@@ -17,5 +17,7 @@ public class ConfigurationConstants {
     public static final String HOSTNAME = "hostname";
     public static final String PORT = "port";
     public static final String SID = "sid";
+    public static final String SCHEMA_USERNAME = "schema_username";
+    public static final String SCHEMA_PASSWORD = "schema_password";
     
 }
