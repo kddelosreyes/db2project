@@ -27,4 +27,22 @@ public enum DataType {
     public String getValue() {
         return value;
     }
+    
+    static DataType getDataType(String value) {
+    	if(value == null) {
+    		return null;
+    	}
+    	
+    	if(value.equals(OracleConstants.SQL_VARCHAR)) {
+    		return DataType.VARCHAR;
+    	} else if(value.equals(OracleConstants.SQL_VARCHAR2)) {
+    		return DataType.VARCHAR2;
+    	} else if(value.equals(OracleConstants.SQL_CHAR)) {
+    		return DataType.CHAR;
+    	} else if(value.equals(OracleConstants.SQL_NUMBER)) {
+    		return DataType.NUMBER;
+    	} else {
+    		return null;
+    	}
+    }
 }
