@@ -52,7 +52,7 @@ public class App {
             			oracleConnection.getConnectionConfiguration().getSchema().getSchemaName(),
             			"%",
             			null);
-            	
+            	Statement statement = connection.createStatement();
             }
         } catch (FileNotFoundException exc) {
             System.out.println("FileNotFoundException: " + exc.getMessage());
