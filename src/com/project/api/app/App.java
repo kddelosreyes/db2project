@@ -7,6 +7,7 @@ package com.project.api.app;
 
 import com.project.api.oraclesql.DataType;
 import com.project.api.oraclesql.OracleConnection;
+import com.project.api.oraclesql.Schema;
 import com.project.api.oraclesql.Select;
 import com.project.api.oraclesql.Table;
 import com.project.api.oraclesql.TableColumn;
@@ -39,6 +40,9 @@ public class App {
     private static final String PROJECT_FILE = "project.properties";
 
     private static final int IDX_TABLE_NAME = 3;
+    
+    private static final Boolean TRUE = true;
+    private static final Boolean FALSE = false;
 
     public static Connection getConnection() throws IOException, FileNotFoundException {
         if (oracleConnection == null) {
@@ -63,15 +67,17 @@ public class App {
         try {
             Connection connection = getConnection();
             DatabaseMetaData metaData = connection.getMetaData();
+            Schema schema = oracleConnection.getConnectionConfiguration().getSchema();
             ResultSet rs = metaData.getTables(null,
-                    oracleConnection.getConnectionConfiguration().getSchema().getSchemaName(),
+                    schema.getSchemaName().toUpperCase(),
                     "%",
                     null);
             Statement statement = connection.createStatement();
             while (rs.next()) {
                 String tableName = rs.getString(IDX_TABLE_NAME);
                 if (getTablesFromConfig().contains(tableName)) {
-                    Table table = new Table(tableName);
+                    @SuppressWarnings("null")
+                    Table table = (schema == null) ? new Table(tableName) : new Table(tableName, schema);
                     Select select = Select.createSelectInstance().tableFields().from(table);
                     ResultSet sResultSet = statement.executeQuery(select.getQueryString());
                     ResultSetMetaData resultSetMetaData = sResultSet.getMetaData();
@@ -80,13 +86,15 @@ public class App {
                         String columnName = resultSetMetaData.getColumnName(i);
                         DataType columnTypeName = DataType.getDataType(resultSetMetaData.getColumnTypeName(i));
                         int columnDisplaySize = resultSetMetaData.getColumnDisplaySize(i);
-                        boolean isNullable = Boolean.valueOf(resultSetMetaData.isNullable(i) == 1 ? "true" : "false");
+                        boolean isNullable = resultSetMetaData.isNullable(i) == 1 ? TRUE : FALSE;
+                        
                         TableColumn tableColumn = new TableColumn(columnName, columnTypeName, columnDisplaySize, isNullable);
 
                         table.addTableColumnName(columnName);
                         table.addTableColumn(tableColumn);
                         table.addToTableColumnMapping(columnName, tableColumn);
                     }
+                    tables.add(table);
                 }
             }
         } catch (FileNotFoundException exc) {

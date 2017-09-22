@@ -24,6 +24,7 @@ public class ConnectionConfiguration implements Serializable {
     private Schema schema;
 
     public ConnectionConfiguration() {
+        schema = new Schema();
     }
 
     public ConnectionConfiguration(String connection, String username, String password,

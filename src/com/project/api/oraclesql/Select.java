@@ -29,7 +29,7 @@ public class Select {
     }
 
     public Select tableFields() {
-        queryString.append(" * ");
+        queryString.append("* ");
         return this;
     }
 
@@ -43,7 +43,9 @@ public class Select {
 
     public Select from(Table table) {
         queryString.append(FROM);
-        queryString.append(table.getTableName());
+        queryString.append(table.getSchema() == null
+                ? table.getTableName()
+                : table.getSchema().getSchemaName() + "." + table.getTableName());
         return this;
     }
 
@@ -116,13 +118,7 @@ public class Select {
     }
 
     public String getQueryString() {
-        end();
         return queryString.toString();
-    }
-
-    private Select end() {
-        queryString.append(";");
-        return this;
     }
 
 }

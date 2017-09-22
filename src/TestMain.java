@@ -1,10 +1,8 @@
 
 import com.project.api.app.App;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.Statement;
+import com.project.api.oraclesql.Table;
+import com.project.api.oraclesql.TableColumn;
+import java.util.List;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -18,23 +16,14 @@ import java.sql.Statement;
 public class TestMain {
 
     public static void main(String[] args) throws Exception {
-        Connection conn = App.getConnection();
-        DatabaseMetaData md = conn.getMetaData();
-        ResultSet rs = md.getTables(null, null, "%", null);
-        Statement st = conn.createStatement();
-        ResultSet in;
-        while (rs.next()) {
-            if(rs.getString(3).equalsIgnoreCase("PERSON")) {
-                in = st.executeQuery("SELECT * FROM PERSON");
-                ResultSetMetaData rsmd = in.getMetaData();
-                int numberOfColumns = rsmd.getColumnCount();
-                for(int i = 1; i <= numberOfColumns; i++) {
-                    System.out.println(rsmd.getColumnName(i));
-                    System.out.println(rsmd.getColumnTypeName(i));
-                    System.out.println(rsmd.getColumnDisplaySize(i));
-                    System.out.println(rsmd.isNullable(i));
-                    System.out.println("==============");
-                }
+        List<Table> tables = App.getTables();
+        for(Table table : tables) {
+            System.out.println(table.getTableName());
+            for(TableColumn tableColumn : table.getTableColumns()) {
+                System.out.println(tableColumn.getColumnName());
+                System.out.println(tableColumn.getDataType());
+                System.out.println(tableColumn.getLength());
+                System.out.println(tableColumn.getIsNull());
             }
         }
     }

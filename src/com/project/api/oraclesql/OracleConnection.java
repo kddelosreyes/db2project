@@ -50,7 +50,11 @@ public class OracleConnection {
         connectionConfig = new ConnectionConfiguration();
 
         while ((content = br.readLine()) != null) {
-            if (content.contains(ConfigurationConstants.CONNECTION)) {
+            if (content.contains(ConfigurationConstants.SCHEMA_USERNAME)) {
+                connectionConfig.setSchemaName(FileUtils.getValue(content));
+            } else if (content.contains(ConfigurationConstants.SCHEMA_PASSWORD)) {
+                connectionConfig.setSchemaPassword(FileUtils.getValue(content));
+            } else if (content.contains(ConfigurationConstants.CONNECTION)) {
                 connectionConfig.setConnection(FileUtils.getValue(content));
             } else if (content.contains(ConfigurationConstants.USERNAME)) {
                 connectionConfig.setUsername(FileUtils.getValue(content));
@@ -62,10 +66,6 @@ public class OracleConnection {
                 connectionConfig.setPort(FileUtils.getValue(content));
             } else if (content.contains(ConfigurationConstants.SID)) {
                 connectionConfig.setSid(FileUtils.getValue(content));
-            } else if (content.contains(ConfigurationConstants.SCHEMA_USERNAME)) {
-                connectionConfig.setSchemaName(FileUtils.getValue(content));
-            } else if (content.contains(ConfigurationConstants.SCHEMA_PASSWORD)) {
-                connectionConfig.setSchemaPassword(FileUtils.getValue(content));
             }
         }
 
