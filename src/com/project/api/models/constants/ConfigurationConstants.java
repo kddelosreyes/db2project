@@ -10,7 +10,7 @@ package com.project.api.models.constants;
  * @author Kim Howel delos Reyes
  */
 public class ConfigurationConstants {
-    
+
     public static final String CONNECTION = "connection";
     public static final String USERNAME = "username";
     public static final String PASSWORD = "password";
@@ -19,5 +19,5 @@ public class ConfigurationConstants {
     public static final String SID = "sid";
     public static final String SCHEMA_USERNAME = "schema_username";
     public static final String SCHEMA_PASSWORD = "schema_password";
-    
+
 }

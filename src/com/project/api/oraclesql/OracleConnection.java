@@ -23,66 +23,66 @@ import java.sql.SQLException;
  * @author Kim Howel delos Reyes
  */
 public class OracleConnection {
-    
+
     private static Connection connection = null;
     private static ConnectionConfiguration connectionConfig = null;
-    
+
     private final String CONFIG_FILE = "config.properties";
     private final String ORACLE_JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
-    
+
     public OracleConnection() throws IOException, FileNotFoundException {
-        if(connection == null) {
+        if (connection == null) {
             getConnectionParameters();
         }
     }
-    
-    public Connection getConnection () {
+
+    public Connection getConnection() {
         return connection;
     }
-    
-    public static ConnectionConfiguration getConnectionConfiguration() {
-    	return connectionConfig;
+
+    public ConnectionConfiguration getConnectionConfiguration() {
+        return connectionConfig;
     }
-    
-    private void getConnectionParameters() throws IOException, FileNotFoundException  {
+
+    private void getConnectionParameters() throws IOException, FileNotFoundException {
         BufferedReader br = FileUtils.getFileReader(CONFIG_FILE);
         String content = "";
         connectionConfig = new ConnectionConfiguration();
-        
-        while((content = br.readLine()) != null) {
-            if(content.contains(ConfigurationConstants.CONNECTION)) {
+
+        while ((content = br.readLine()) != null) {
+            if (content.contains(ConfigurationConstants.CONNECTION)) {
                 connectionConfig.setConnection(FileUtils.getValue(content));
-            } else if(content.contains(ConfigurationConstants.USERNAME)) {
+            } else if (content.contains(ConfigurationConstants.USERNAME)) {
                 connectionConfig.setUsername(FileUtils.getValue(content));
-            } else if(content.contains(ConfigurationConstants.PASSWORD)) {
+            } else if (content.contains(ConfigurationConstants.PASSWORD)) {
                 connectionConfig.setPassword(FileUtils.getValue(content));
-            } else if(content.contains(ConfigurationConstants.HOSTNAME)) {
+            } else if (content.contains(ConfigurationConstants.HOSTNAME)) {
                 connectionConfig.setHostname(FileUtils.getValue(content));
-            } else if(content.contains(ConfigurationConstants.PORT)) {
+            } else if (content.contains(ConfigurationConstants.PORT)) {
                 connectionConfig.setPort(FileUtils.getValue(content));
-            } else if(content.contains(ConfigurationConstants.SID)) {
+            } else if (content.contains(ConfigurationConstants.SID)) {
                 connectionConfig.setSid(FileUtils.getValue(content));
-            } else if(content.contains(ConfigurationConstants.SCHEMA_USERNAME)) {
-            	connectionConfig.setSchemaName(FileUtils.getValue(content));
-            } else if(content.contains(ConfigurationConstants.SCHEMA_PASSWORD)) {
-            	connectionConfig.setSchemaPassword(FileUtils.getValue(content));
+            } else if (content.contains(ConfigurationConstants.SCHEMA_USERNAME)) {
+                connectionConfig.setSchemaName(FileUtils.getValue(content));
+            } else if (content.contains(ConfigurationConstants.SCHEMA_PASSWORD)) {
+                connectionConfig.setSchemaPassword(FileUtils.getValue(content));
             }
         }
-        
-        if(connection == null) {
+
+        if (connection == null) {
             try {
                 Class.forName(ORACLE_JDBC_DRIVER);
-                connection = DriverManager.getConnection(  
+                connection = DriverManager.getConnection(
                         "jdbc:oracle:thin:@" + connectionConfig.getHostname() + ":"
-                                + connectionConfig.getPort() + ":" + connectionConfig.getSid(),
+                        + connectionConfig.getPort() + ":" + connectionConfig.getSid(),
                         connectionConfig.getUsername(),
-                        connectionConfig.getPassword()); 
-            } catch(ClassNotFoundException exc) {
+                        connectionConfig.getPassword());
+            } catch (ClassNotFoundException exc) {
                 System.out.println("ClassNotFoundException");
-            } catch(SQLException exc) {
+            } catch (SQLException exc) {
                 System.out.println("SQLException");
             }
         }
     }
-    
+
 }

@@ -27,14 +27,14 @@ public class Select {
     public static Select createSelectInstance() {
         return new Select();
     }
-    
+
     public Select tableFields() {
-    	queryString.append(" * ");
-    	return this;
+        queryString.append(" * ");
+        return this;
     }
 
     public Select tableFields(List<TableColumn> tableColumns, String tableName) {
-        for(TableColumn tableColumn : tableColumns) {
+        for (TableColumn tableColumn : tableColumns) {
             queryString.append(tableName).append(".").append(tableColumn.getColumnName()).append(", ");
         }
         queryString.deleteCharAt(queryString.length() - 2);
@@ -114,15 +114,15 @@ public class Select {
     public Select groupBy() {
         return this;
     }
-    
+
     public String getQueryString() {
-    	end();
-    	return queryString.toString();
+        end();
+        return queryString.toString();
     }
-    
+
     private Select end() {
-    	queryString.append(";");
-    	return this;
+        queryString.append(";");
+        return this;
     }
 
 }
