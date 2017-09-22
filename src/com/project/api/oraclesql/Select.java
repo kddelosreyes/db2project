@@ -17,6 +17,12 @@ public class Select {
 
     public static final String SELECT = "SELECT ";
     public static final String FROM = "FROM ";
+    
+    public static final String LEFT_JOIN = "LEFT JOIN ";
+    public static final String RIGHT_JOIN = "RIGHT JOIN ";
+    public static final String INNER_JOIN = "INNER JOIN ";
+    public static final String JOIN = "JOIN ";
+    public static final String OUTER_JOIN = "OUTER JOIN ";
 
     private Select() {
         if (queryString == null) {
@@ -40,32 +46,62 @@ public class Select {
         queryString.deleteCharAt(queryString.length() - 2);
         return this;
     }
-
-    public Select from(Table table) {
-        queryString.append(FROM);
+    
+    private void getTableSchema(Table table) {
         queryString.append(table.getSchema() == null
                 ? table.getTableName()
                 : table.getSchema().getSchemaName() + "." + table.getTableName());
+    }
+
+    public Select from(Table table) {
+        queryString.append(FROM);
+        getTableSchema(table);
+        return this;
+    }
+    
+    public Select join(Table table, JoinType joinType) {
+        switch(joinType) {
+            case INNER_JOIN:
+                innerJoin(table);
+                break;
+            case OUTER_JOIN:
+                outerJoin(table);
+                break;
+            case LEFT_JOIN:
+                leftJoin(table);
+                break;
+            case RIGHT_JOIN:
+                rightJoin(table);
+                break;
+            case JOIN:
+                join(table);
+                break;    
+        }
+        getTableSchema(table);
         return this;
     }
 
-    public Select leftJoin() {
-        return this;
+    private void leftJoin(Table table) {
+        queryString.append(LEFT_JOIN);
     }
 
-    public Select rightJoin() {
-        return this;
+    private void rightJoin(Table table) {
+        queryString.append(RIGHT_JOIN);
     }
 
-    public Select innerJoin() {
-        return this;
+    private void innerJoin(Table table) {
+        queryString.append(INNER_JOIN);
     }
 
-    public Select join() {
-        return this;
+    private void join(Table table) {
+        queryString.append(JOIN);
+    }
+    
+    private void outerJoin(Table table) {
+        queryString.append(OUTER_JOIN);
     }
 
-    public Select on() {
+    public Select on(TableColumn rightColumn, TableColumn leftColumn) {
         return this;
     }
 
