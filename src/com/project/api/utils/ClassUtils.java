@@ -11,11 +11,11 @@ package com.project.api.utils;
  */
 public class ClassUtils {
     
-    private static final ClassLoader classLoader = new ClassLoader();
-    private static final String modelPackage = "com.project.api.models.";
+    private static final ClassLoader classLoader = new ClassLoader() {};
+    private static final String MODEL_PACKAGE = "com.project.api.models.";
     
     public static Object loadClass(String className) throws ClassNotFoundException {
-    	return loader.loadClass(modelPackage + className);
+    	return classLoader.loadClass(MODEL_PACKAGE + className);
     }
     
 }

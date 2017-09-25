@@ -5,18 +5,26 @@
  */
 package com.project.api.app;
 
+import com.project.api.oraclesql.DataType;
 import com.project.api.oraclesql.OracleConnection;
+import com.project.api.oraclesql.Schema;
+import com.project.api.oraclesql.Select;
 import com.project.api.oraclesql.Table;
+import com.project.api.oraclesql.TableColumn;
 import com.project.api.utils.FileUtils;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -30,8 +38,11 @@ public class App {
     private static List<String> tableNames = null;
 
     private static final String PROJECT_FILE = "project.properties";
-    
+
     private static final int IDX_TABLE_NAME = 3;
+    
+    private static final Boolean TRUE = true;
+    private static final Boolean FALSE = false;
 
     public static Connection getConnection() throws IOException, FileNotFoundException {
         if (oracleConnection == null) {
@@ -40,9 +51,9 @@ public class App {
 
         return oracleConnection.getConnection();
     }
-    
-    public static Map<Class, Table> getClassTableMapping {
-    	return classTableMapping;
+
+    public static Map<Class, Table> getClassTableMapping() {
+        return classTableMapping;
     }
 
     public static List<Table> getTables() {
@@ -50,87 +61,93 @@ public class App {
             tables = new ArrayList<>();
             classTableMapping = new HashMap<>();
         } else {
-        	return tables;
+            return tables;
         }
 
         try {
             Connection connection = getConnection();
             DatabaseMetaData metaData = connection.getMetaData();
+            Schema schema = oracleConnection.getConnectionConfiguration().getSchema();
             ResultSet rs = metaData.getTables(null,
-            		oracleConnection.getConnectionConfiguration().getSchema().getSchemaName(),
-            		"%",
-            		null);
+                    schema.getSchemaName().toUpperCase(),
+                    "%",
+                    null);
             Statement statement = connection.createStatement();
-            while(rs.next()) {
-            	String tableName = rs.getString(IDX_TABLE_NAME);
-            	if(getTablesFromConfig().contains(tableName)) {
-            		Table table = new Table(tableName);
-            		Select select = Select.createSelectInstance().tableFields().from(table);
-            		ResultSet sResultSet = statement.executeQuery(select.getQueryString());
-            		ResultSetMetaData metaData = sResultSet.getMetaData();
-            		int numberOfColumns = metaData.getColumnCount();
-            		for(int i = 1; i <= numberOfColumns; i++) {
-            			String columnName = metaData.getColumnName(i);
-            			DataType columnTypeName = DataType.getDataType(metaData.getColumnTypeName(i));
-            			int columnDisplaySize = Integer.valueOf(metaData.getColumnDisplaySize(i));
-            			boolean isNullable = Boolean.valueOf(metaData.isNullable(i));
-            			TableColumn tableColumn = new TableColumn(columnName, columnTypeName, columnDisplaySize, isNullable);
-            			
-            			table.addTableColumnName(columnName);
-            			table.addTableColumn(tableColumn);
-            			table.addToTableColumnMapping(columnName, tableColumn);
-            		}
-            	}
+            while (rs.next()) {
+                String tableName = rs.getString(IDX_TABLE_NAME);
+                if (getTablesFromConfig().contains(tableName)) {
+                    @SuppressWarnings("null")
+                    Table table = (schema == null) ? new Table(tableName) : new Table(tableName, schema);
+                    Select select = Select.createSelectInstance().tableFields().from(table);
+                    ResultSet sResultSet = statement.executeQuery(select.getQueryString());
+                    ResultSetMetaData resultSetMetaData = sResultSet.getMetaData();
+                    int numberOfColumns = resultSetMetaData.getColumnCount();
+                    for (int i = 1; i <= numberOfColumns; i++) {
+                        String columnName = resultSetMetaData.getColumnName(i);
+                        DataType columnTypeName = DataType.getDataType(resultSetMetaData.getColumnTypeName(i));
+                        int columnDisplaySize = resultSetMetaData.getColumnDisplaySize(i);
+                        boolean isNullable = resultSetMetaData.isNullable(i) == 1 ? TRUE : FALSE;
+                        
+                        TableColumn tableColumn = new TableColumn(columnName, columnTypeName, columnDisplaySize, isNullable);
+
+                        table.addTableColumnName(columnName);
+                        table.addTableColumn(tableColumn);
+                        table.addToTableColumnMapping(columnName, tableColumn);
+                    }
+                    tables.add(table);
+                }
             }
         } catch (FileNotFoundException exc) {
             System.out.println("FileNotFoundException: " + exc.getMessage());
         } catch (IOException exc) {
             System.out.println("IOException: " + exc.getMessage());
+        } catch (SQLException exc) {
+            System.out.println("SQLException: " + exc.getMessage());
         }
 
         return tables;
     }
-    
+
     public static Table getTable(String tableName) {
-    	for(Table table : tables) {
-    		if(table.getTableName().equalsIgnoreCase(tableName)) {
-    			return table;
-    		}
-    	}
-    	return null;
+        for (Table table : tables) {
+            if (table.getTableName().equalsIgnoreCase(tableName)) {
+                return table;
+            }
+        }
+        return null;
     }
-    
-    public static ArrayList<TableColumn> getTableColumns(Table _table) {
-    	for(Table table : tables) {
-    		if(table == _table) {
-    			return table.getTableColumns();
-    		}
-    	}
-    	return null;
+
+    public static List<TableColumn> getTableColumns(Table _table) {
+        for (Table table : tables) {
+            if (table == _table) {
+                return table.getTableColumns();
+            }
+        }
+        return null;
     }
-    
+
     public static TableColumn getTableColumn(Table _table, String tableColumnName) {
-    	for(Table table : tables) {
-    		if(table == _table) {
-    			return table.getTableColumn(tableColumnName);
-    		}
-    	}
-    	return null;
+        for (Table table : tables) {
+            if (table == _table) {
+                return table.getTableColumn(tableColumnName);
+            }
+        }
+        return null;
     }
 
     private static List<String> getTablesFromConfig() throws IOException, FileNotFoundException {
-    	if(tableNames == null) {
-    		tableNames = new ArrayList<>();
-    	} else {
-    		return tableNames;
-    	}
-    	
+        if (tableNames == null) {
+            tableNames = new ArrayList<>();
+        } else {
+            return tableNames;
+        }
+
         BufferedReader br = FileUtils.getFileReader(PROJECT_FILE);
         String content = "";
         while ((content = br.readLine()) != null) {
             tableNames.add(content);
         }
-        
+
         return tableNames;
     }
 
