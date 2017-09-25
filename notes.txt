@@ -1,3 +1,4 @@
 1. Make Table generic for adding table data - this is to prevent repetitive fetching of data from the database.
 2. Create ENTITY superclass for generic objects
 3. Refactor constants for models only.
+4. User must extends from ENTITY then add userid on refactor
