@@ -11,13 +11,15 @@ import java.io.Serializable;
  *
  * @author Kim Howel delos Reyes
  */
-public class User implements Serializable {
+public class User extends Entity implements Serializable {
     
 	private String username;
 	private String password;
 	private Date lastLoginDate;
 	
-	public User(String username, String password, Date lastLoginDate) {
+	public User(Integer id, String username,
+			String password, Date lastLoginDate) {
+		super(id);
 		this.username = username;
 		this.password = password;
 		this.lastLoginDate = lastLoginDate;
@@ -25,6 +27,8 @@ public class User implements Serializable {
 	
 	public Object getAttribute(UserAttribute attribute) {
 		switch(attribute) {
+			case USER_ID:
+				return getId();
 			case USERNAME:
 				return getUsername();
 			case PASSWORD:
@@ -38,12 +42,14 @@ public class User implements Serializable {
 	
 	public void setAttribute(UserAttribute attribute, Object value) {
 		switch(attribute) {
+			case USER_ID:
+				setId(value);
 			case USERNAME:
-				return setUsername(value);
+				setUsername(value);
 			case PASSWORD:
-				return setPassword(value);
+				setPassword(value);
 			case LAST_LOGIN_DATE:
-				return setLastLoginDate(value);
+				setLastLoginDate(value);
 		}
 	}
 	

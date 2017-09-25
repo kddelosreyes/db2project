@@ -3,19 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.project.api.models.user;
-
-import java.io.Serializable;
+package com.project.api.models.entity;
 
 /**
  *
  * @author Kim Howel delos Reyes
  */
-public enum UserAttribute implements EntityAttribute {
-	
-	USER_ID,
-	USERNAME,
-	PASSWORD,
-	LAST_LOGIN_DATE;
+public interface EntityAttribute {
 	
 }

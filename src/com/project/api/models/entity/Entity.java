@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.project.api.models;
+package com.project.api.models.entity;
 
 /**
  *
@@ -24,5 +24,9 @@ public abstract class Entity {
     public void setId(Integer id) {
         this.id = id;
     }
+    
+    public Object getAttribute(EntityAttribute attribute);
+    
+    public void setAttribute(EntityAttribute attribute, Object value);
     
 }
