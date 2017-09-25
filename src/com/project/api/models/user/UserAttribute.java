@@ -11,10 +11,10 @@ import java.io.Serializable;
  *
  * @author Kim Howel delos Reyes
  */
-public class UserConstants {
-    
-	public static final String USER_NAME = "Username";
-	public static final String USER_PASSWORD = "Password";
-	public static final String USER_LAST_LOGIN = "Last Login";
+public enum UserAttribute {
+	
+	USERNAME,
+	PASSWORD,
+	LAST_LOGIN_DATE;
 	
 }

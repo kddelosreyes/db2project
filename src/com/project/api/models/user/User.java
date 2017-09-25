@@ -23,6 +23,30 @@ public class User implements Serializable {
 		this.lastLoginDate = lastLoginDate;
 	}
 	
+	public Object getAttribute(UserAttribute attribute) {
+		switch(attribute) {
+			case USERNAME:
+				return getUsername();
+			case PASSWORD:
+				return getPassword();
+			case LAST_LOGIN_DATE:
+				return getLastLoginDate();
+			default:
+				return null;
+		}
+	}
+	
+	public void setAttribute(UserAttribute attribute, Object value) {
+		switch(attribute) {
+			case USERNAME:
+				return setUsername(value);
+			case PASSWORD:
+				return setPassword(value);
+			case LAST_LOGIN_DATE:
+				return setLastLoginDate(value);
+		}
+	}
+	
 	public String getUsername() {
 		return username;
 	}
