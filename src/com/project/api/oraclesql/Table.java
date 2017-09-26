@@ -5,6 +5,7 @@
  */
 package com.project.api.oraclesql;
 
+import com.project.api.models.Item;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,24 +25,25 @@ public class Table {
     private List<TableColumn> tableColumns;
     private Map<String, TableColumn> tableColumnMapping;
     private List<Constraint> tableConstraints;
+    private List<Item> tableItems;
     
-    public Table(String tableName) {
-        this.tableName = tableName;
-        init();
-    }
-    
-    public Table(String tableName, Schema schema) {
-        this.tableName = tableName;
-        this.schema = schema;
-        init();
-    }
-    
-    private void init() {
+    public Table() {
         queryCreateTable = new StringBuilder();
         tableColumnNames = new ArrayList<>();
         tableColumns = new ArrayList<>();
         tableColumnMapping = new HashMap<>();
         tableConstraints = new ArrayList<>();
+        tableItems = new ArrayList<>();
+    }
+    
+    public Table(String tableName) {
+        this();
+        this.tableName = tableName;
+    }
+    
+    public Table(String tableName, Schema schema) {
+        this(tableName);
+        this.schema = schema;
     }
     
     public String getTableName() {
@@ -106,6 +108,10 @@ public class Table {
     
     public TableColumn getTableColumn(String tableColumnName) {
     	return tableColumnMapping.get(tableColumnName);
+    }
+    
+    public List<Item> getTableItems() {
+        return tableItems;
     }
     
 }
