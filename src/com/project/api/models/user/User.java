@@ -53,27 +53,27 @@ public class User extends Entity implements Serializable {
 		}
 	}
 	
-	public String getUsername() {
+	private String getUsername() {
 		return username;
 	}
 	
-	public void setUsername(String username) {
+	private void setUsername(String username) {
 		this.username = username;
 	}
 	
-	public String getPassword() {
+	private String getPassword() {
 		return password;
 	}
 	
-	public void setPassword(String password) {
+	private void setPassword(String password) {
 		this.password = password;
 	}
 	
-	public Date getLastLoginDate() {
+	private Date getLastLoginDate() {
 		return lastLoginDate;
 	}
 	
-	public void setLastLoginDate(Date lastLoginDate) {
+	private void setLastLoginDate(Date lastLoginDate) {
 		this.lastLoginDate = lastLoginDate;
 	}
 	

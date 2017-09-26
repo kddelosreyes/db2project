@@ -9,7 +9,7 @@ package com.project.api.models.entity;
  *
  * @author Kim Howel delos Reyes
  */
-public abstract class Entity {
+public abstract class Entity implements Serializable {
     
     private Integer id;
     

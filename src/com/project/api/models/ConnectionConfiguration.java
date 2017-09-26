@@ -29,13 +29,13 @@ public class ConnectionConfiguration implements Serializable {
 
     public ConnectionConfiguration(String connection, String username, String password,
             String hostname, Short port, String sid) {
+    	this();
         this.connection = connection;
         this.username = username;
         this.password = password;
         this.hostname = hostname;
         this.port = port;
         this.sid = sid;
-        schema = new Schema();
     }
 
     public String getConnection() {
