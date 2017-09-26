@@ -17,6 +17,7 @@ public class Select {
 
     public static final String SELECT = "SELECT ";
     public static final String FROM = "FROM ";
+    public static final String ON = "ON ";
     
     public static final String LEFT_JOIN = "LEFT JOIN ";
     public static final String RIGHT_JOIN = "RIGHT JOIN ";
@@ -62,46 +63,47 @@ public class Select {
     public Select join(Table table, JoinType joinType) {
         switch(joinType) {
             case INNER_JOIN:
-                innerJoin(table);
+                innerJoin();
                 break;
             case OUTER_JOIN:
-                outerJoin(table);
+                outerJoin();
                 break;
             case LEFT_JOIN:
-                leftJoin(table);
+                leftJoin();
                 break;
             case RIGHT_JOIN:
-                rightJoin(table);
+                rightJoin();
                 break;
             case JOIN:
-                join(table);
+                join();
                 break;    
         }
         getTableSchema(table);
         return this;
     }
 
-    private void leftJoin(Table table) {
+    private void leftJoin() {
         queryString.append(LEFT_JOIN);
     }
 
-    private void rightJoin(Table table) {
+    private void rightJoin() {
         queryString.append(RIGHT_JOIN);
     }
 
-    private void innerJoin(Table table) {
+    private void innerJoin() {
         queryString.append(INNER_JOIN);
     }
 
-    private void join(Table table) {
+    private void join() {
         queryString.append(JOIN);
     }
     
-    private void outerJoin(Table table) {
+    private void outerJoin() {
         queryString.append(OUTER_JOIN);
     }
 
     public Select on(TableColumn rightColumn, TableColumn leftColumn) {
+        queryString.append(rightColumn.getColumnName() + " = " + leftColumn.getColumnName());
         return this;
     }
 

@@ -18,11 +18,13 @@ public class TestMain {
     public static void main(String[] args) throws Exception {
         List<Table> tables = App.getTables();
         for(Table table : tables) {
-            System.out.println(table.getTableName());
+            System.out.println("TABLE NAME: " + table.getTableName());
             for(TableColumn tableColumn : table.getTableColumns()) {
                 System.out.println(tableColumn.getColumnName());
                 System.out.println(tableColumn.getDataType());
                 System.out.println(tableColumn.getLength());
+                System.out.println(tableColumn.getPrecision());
+                System.out.println(tableColumn.getScale());
                 System.out.println(tableColumn.getIsNull());
             }
         }

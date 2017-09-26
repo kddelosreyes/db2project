@@ -5,17 +5,17 @@
  */
 package com.project.api.models.user;
 
-import java.io.Serializable;
+import com.project.api.models.entity.EntityAttribute;
 
 /**
  *
  * @author Kim Howel delos Reyes
  */
 public enum UserAttribute implements EntityAttribute {
-	
-	USER_ID,
-	USERNAME,
-	PASSWORD,
-	LAST_LOGIN_DATE;
-	
+
+    USER_ID,
+    USERNAME,
+    PASSWORD,
+    LAST_LOGIN_DATE;
+
 }

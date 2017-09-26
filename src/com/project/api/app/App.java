@@ -9,6 +9,7 @@ import com.project.api.oraclesql.DataType;
 import com.project.api.oraclesql.OracleConnection;
 import com.project.api.oraclesql.Schema;
 import com.project.api.oraclesql.Select;
+import com.project.api.oraclesql.Sequence;
 import com.project.api.oraclesql.Table;
 import com.project.api.oraclesql.TableColumn;
 import com.project.api.utils.FileUtils;
@@ -36,13 +37,17 @@ public class App {
     private static List<Table> tables = null;
     private static Map<Class, Table> classTableMapping = null;
     private static List<String> tableNames = null;
+    private static List<String> sequenceNames = null;
 
-    private static final String PROJECT_FILE = "project.properties";
+    private static final String PROJECT_FILE = "application.properties";
 
     private static final int IDX_TABLE_NAME = 3;
     
     private static final Boolean TRUE = true;
     private static final Boolean FALSE = false;
+    
+    private static final String TABLE_IDX = "TABLE=";
+    private static final String SEQUENCE_IDX = "SEQUENCE=";
 
     public static Connection getConnection() throws IOException, FileNotFoundException {
         if (oracleConnection == null) {
@@ -64,10 +69,11 @@ public class App {
             return tables;
         }
 
+        Schema schema = null;
         try {
             Connection connection = getConnection();
             DatabaseMetaData metaData = connection.getMetaData();
-            Schema schema = oracleConnection.getConnectionConfiguration().getSchema();
+            schema = oracleConnection.getConnectionConfiguration().getSchema();
             ResultSet rs = metaData.getTables(null,
                     schema.getSchemaName().toUpperCase(),
                     "%",
@@ -75,7 +81,7 @@ public class App {
             Statement statement = connection.createStatement();
             while (rs.next()) {
                 String tableName = rs.getString(IDX_TABLE_NAME);
-                if (getTablesFromConfig().contains(tableName)) {
+                if (getTablesFromProperties().contains(tableName)) {
                     @SuppressWarnings("null")
                     Table table = (schema == null) ? new Table(tableName) : new Table(tableName, schema);
                     Select select = Select.createSelectInstance().tableFields().from(table);
@@ -86,9 +92,13 @@ public class App {
                         String columnName = resultSetMetaData.getColumnName(i);
                         DataType columnTypeName = DataType.getDataType(resultSetMetaData.getColumnTypeName(i));
                         int columnDisplaySize = resultSetMetaData.getColumnDisplaySize(i);
+                        int columnPrecision = resultSetMetaData.getPrecision(i);
+                        int columnScale = resultSetMetaData.getScale(i);
                         boolean isNullable = resultSetMetaData.isNullable(i) == 1 ? TRUE : FALSE;
                         
-                        TableColumn tableColumn = new TableColumn(columnName, columnTypeName, columnDisplaySize, isNullable);
+                        TableColumn tableColumn = new TableColumn(columnName, columnTypeName,
+                                columnDisplaySize, columnPrecision,
+                                columnScale, isNullable);
 
                         table.addTableColumnName(columnName);
                         table.addTableColumn(tableColumn);
@@ -104,8 +114,45 @@ public class App {
         } catch (SQLException exc) {
             System.out.println("SQLException: " + exc.getMessage());
         }
+        
+        for(Table table : tables) {
+            for(String sequenceName : getSequences()) {
+                if(sequenceName.toUpperCase().indexOf(table.getTableName().toUpperCase()) == 0) {
+                    table.setSequence(new Sequence(schema, sequenceName));
+                }
+            }
+        }
 
         return tables;
+    }
+    
+    public static List<String> getSequences() {
+        try {
+            return getSequencesFromProperties();
+        } catch(FileNotFoundException exc) {
+            System.out.println("FileNotFoundException: " + exc.getMessage());
+        } catch(IOException exc) {
+            System.out.println("IOException: " + exc.getMessage());
+        }
+        return null;
+    }
+    
+    private static List<String> getSequencesFromProperties() throws IOException, FileNotFoundException {
+        if (sequenceNames == null) {
+            sequenceNames = new ArrayList<>();
+        } else {
+            return sequenceNames;
+        }
+
+        BufferedReader br = FileUtils.getFileReader(PROJECT_FILE);
+        String content = "";
+        while ((content = br.readLine()) != null) {
+            if(content.indexOf(SEQUENCE_IDX) == 0) {
+                sequenceNames.add(content.split("=")[1]);
+            }
+        }
+
+        return tableNames;
     }
 
     public static Table getTable(String tableName) {
@@ -135,7 +182,7 @@ public class App {
         return null;
     }
 
-    private static List<String> getTablesFromConfig() throws IOException, FileNotFoundException {
+    private static List<String> getTablesFromProperties() throws IOException, FileNotFoundException {
         if (tableNames == null) {
             tableNames = new ArrayList<>();
         } else {
@@ -145,7 +192,9 @@ public class App {
         BufferedReader br = FileUtils.getFileReader(PROJECT_FILE);
         String content = "";
         while ((content = br.readLine()) != null) {
-            tableNames.add(content);
+            if(content.indexOf(TABLE_IDX) == 0) {
+                tableNames.add(content.split("=")[1]);
+            }
         }
 
         return tableNames;

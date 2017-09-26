@@ -5,13 +5,7 @@
  */
 package com.project.api.utils;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.text.DecimalFormat;
 
 /**
  *
@@ -19,7 +13,7 @@ import java.io.IOException;
  */
 public class NumberFormatUtils {
 
-	public static final String DECIMAL_FORMAT = "###,###.##";
+    public static final String DECIMAL_FORMAT = "###,###.##";
     public static final String INTEGER_FORMAT = "###,###";
 
     public static final String DECIMAL_FORMAT_2ZEROS = "###,##0.00";
@@ -29,7 +23,7 @@ public class NumberFormatUtils {
     public static final String DECIMAL_FORMAT_6ZEROS = "###,##0.000000";
 
     public static String formatValue(DecimalFormat formatter, Number value) {
-    	return formatter.format(value);
+        return formatter.format(value);
     }
-    
+
 }

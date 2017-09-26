@@ -16,7 +16,8 @@ public enum DataType {
     VARCHAR(OracleConstants.SQL_VARCHAR),
     VARCHAR2(OracleConstants.SQL_VARCHAR2),
     CHAR(OracleConstants.SQL_CHAR),
-    NUMBER(OracleConstants.SQL_NUMBER);
+    NUMBER(OracleConstants.SQL_NUMBER),
+    DATE(OracleConstants.SQL_DATE);
 
     private final String value;
 

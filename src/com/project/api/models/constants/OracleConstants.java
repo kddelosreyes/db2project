@@ -22,6 +22,7 @@ public class OracleConstants {
     public static final String SQL_VARCHAR = "VARCHAR";
     public static final String SQL_CHAR = "CHAR";
     public static final String SQL_NUMBER = "NUMBER";
+    public static final String SQL_DATE = "DATE";
 
     public static final String SQL_NOT_NULL = "NOT NULL";
     public static final String SQL_PRIMARY_KEY = "PRIMARY KEY";

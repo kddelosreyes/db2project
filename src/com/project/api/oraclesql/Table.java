@@ -5,7 +5,6 @@
  */
 package com.project.api.oraclesql;
 
-import com.project.api.models.Entity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +19,7 @@ public class Table {
     private StringBuilder queryCreateTable;
     private String tableName;
     private Schema schema;
+    private Sequence sequence;
     private List<String> tableColumnNames;
     private List<TableColumn> tableColumns;
     private Map<String, TableColumn> tableColumnMapping;
@@ -58,6 +58,14 @@ public class Table {
     
     public void setSchema(Schema schema) {
         this.schema = schema;
+    }
+    
+    public Sequence getSequence() {
+        return sequence;
+    }
+    
+    public void setSequence(Sequence sequence) {
+        this.sequence = sequence;
     }
     
     public void addTableColumnName(String tableColumnName) {

@@ -23,6 +23,11 @@ public class Sequence {
 
     public Sequence() {
     }
+    
+    public Sequence(Schema schema, String sequenceName) {
+        this.schema = schema;
+        this.sequenceName = sequenceName;
+    }
 
     public Sequence(Schema schema, String sequenceName, Integer startValue,
             Integer incrementValue, Integer minimumValue, Integer maximumValue,

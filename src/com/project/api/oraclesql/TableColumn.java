@@ -16,13 +16,18 @@ public class TableColumn {
     private String columnName;
     private DataType dataType;
     private Integer length;
+    private Integer precision;
+    private Integer scale;
     private Boolean isNull;
 
     public TableColumn(String columnName, DataType dataType,
-            Integer length, Boolean isNull) {
+            Integer length, Integer precision,
+            Integer scale, Boolean isNull) {
         this.columnName = columnName;
         this.dataType = dataType;
         this.length = length;
+        this.precision = precision;
+        this.scale = scale;
         this.isNull = isNull;
     }
 
@@ -48,6 +53,22 @@ public class TableColumn {
 
     public void setLength(Integer length) {
         this.length = length;
+    }
+    
+    public Integer getPrecision() {
+        return precision;
+    }
+    
+    public void setPresision(Integer precision) {
+        this.precision = precision;
+    }
+    
+    public Integer getScale() {
+        return scale;
+    }
+    
+    public void setScale(Integer scale) {
+        this.scale = scale;
     }
 
     public Boolean getIsNull() {
