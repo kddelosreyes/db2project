@@ -49,7 +49,7 @@ public class Select {
     }
     
     private void getTableSchema(Table table) {
-        queryString.append(table.getSchema() == null
+        queryString.append(table.getSchema().getSchemaName() == null
                 ? table.getTableName()
                 : table.getSchema().getSchemaName() + "." + table.getTableName());
     }

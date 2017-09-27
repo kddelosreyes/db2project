@@ -75,7 +75,7 @@ public class App {
             DatabaseMetaData metaData = connection.getMetaData();
             schema = oracleConnection.getConnectionConfiguration().getSchema();
             ResultSet rs = metaData.getTables(null,
-                    schema.getSchemaName().toUpperCase(),
+                    schema.getSchemaName() == null ? null : schema.getSchemaName().toUpperCase(),
                     "%",
                     null);
             Statement statement = connection.createStatement();
@@ -108,11 +108,11 @@ public class App {
                 }
             }
         } catch (FileNotFoundException exc) {
-            System.out.println("FileNotFoundException: " + exc.getMessage());
+            exc.printStackTrace();
         } catch (IOException exc) {
-            System.out.println("IOException: " + exc.getMessage());
+            exc.printStackTrace();
         } catch (SQLException exc) {
-            System.out.println("SQLException: " + exc.getMessage());
+            exc.printStackTrace();
         }
         
         for(Table table : tables) {
