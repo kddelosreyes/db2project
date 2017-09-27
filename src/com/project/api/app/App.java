@@ -75,7 +75,7 @@ public class App {
             DatabaseMetaData metaData = connection.getMetaData();
             schema = oracleConnection.getConnectionConfiguration().getSchema();
             ResultSet rs = metaData.getTables(null,
-                    schema.getSchemaName() == null ? null : schema.getSchemaName().toUpperCase(),
+                    schema == null ? null : schema.getSchemaName().toUpperCase(),
                     "%",
                     null);
             Statement statement = connection.createStatement();

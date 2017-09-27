@@ -24,12 +24,10 @@ public class ConnectionConfiguration implements Serializable {
     private Schema schema;
 
     public ConnectionConfiguration() {
-        schema = new Schema();
     }
 
     public ConnectionConfiguration(String connection, String username, String password,
             String hostname, Short port, String sid) {
-    	this();
         this.connection = connection;
         this.username = username;
         this.password = password;
@@ -91,6 +89,9 @@ public class ConnectionConfiguration implements Serializable {
     }
 
     public void setSchemaName(String schemaName) {
+        if (schema == null) {
+            schema = new Schema();
+        }
         schema.setSchemaName(schemaName);
     }
 

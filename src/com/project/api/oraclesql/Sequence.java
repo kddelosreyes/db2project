@@ -71,7 +71,7 @@ public class Sequence {
 
     @Override
     public String toString() {
-        String queryString = OracleConstants.SQL_CREATE_SEQUENCE + (getSchema() != null ? getSchema().getSchemaName() + "." : "") + getSequenceName();
+        String queryString = OracleConstants.SQL_CREATE_SEQUENCE + (getSchema().getSchemaName() != null ? getSchema().getSchemaName() + "." : "") + getSequenceName();
 
         if (startValue != null) {
             queryString = queryString + OracleConstants.SQL_STARTS_WITH + getStartValue();
