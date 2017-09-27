@@ -101,11 +101,7 @@ public class App {
                     tables.add(table);
                 }
             }
-        } catch (FileNotFoundException exc) {
-            exc.printStackTrace();
-        } catch (IOException exc) {
-            exc.printStackTrace();
-        } catch (SQLException exc) {
+        } catch (IOException | SQLException exc) {
             exc.printStackTrace();
         }
         
