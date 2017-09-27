@@ -189,5 +189,13 @@ public class App {
 
         return tableNames;
     }
+    
+    public static User getLoggedUser() {
+    	return Session.get().getLoggedUser();
+    }
+    
+    public static void setLoggedUser(User user) {
+    	Session.get().setLoggedUser(user);
+    }
 
 }
