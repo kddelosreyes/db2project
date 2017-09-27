@@ -35,7 +35,6 @@ public class App {
 
     private static OracleConnection oracleConnection = null;
     private static List<Table> tables = null;
-    private static Map<Class, Table> classTableMapping = null;
     private static List<String> tableNames = null;
     private static List<String> sequenceNames = null;
 
@@ -57,14 +56,9 @@ public class App {
         return oracleConnection.getConnection();
     }
 
-    public static Map<Class, Table> getClassTableMapping() {
-        return classTableMapping;
-    }
-
     public static List<Table> getTables() {
         if (tables == null) {
             tables = new ArrayList<>();
-            classTableMapping = new HashMap<>();
         } else {
             return tables;
         }
