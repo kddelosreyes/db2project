@@ -3,12 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.project.api.models;
+package com.project.api.models.user;
 
-import com.project.api.oraclesql.DataType;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  *

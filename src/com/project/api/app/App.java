@@ -5,14 +5,6 @@
  */
 package com.project.api.app;
 
-import com.project.api.oraclesql.DataType;
-import com.project.api.oraclesql.OracleConnection;
-import com.project.api.oraclesql.Schema;
-import com.project.api.oraclesql.Select;
-import com.project.api.oraclesql.Sequence;
-import com.project.api.oraclesql.Table;
-import com.project.api.oraclesql.TableColumn;
-import com.project.api.utils.FileUtils;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -23,9 +15,17 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import com.project.api.models.user.User;
+import com.project.api.oraclesql.DataType;
+import com.project.api.oraclesql.OracleConnection;
+import com.project.api.oraclesql.Schema;
+import com.project.api.oraclesql.Select;
+import com.project.api.oraclesql.Sequence;
+import com.project.api.oraclesql.Table;
+import com.project.api.oraclesql.TableColumn;
+import com.project.api.utils.FileUtils;
 
 /**
  *

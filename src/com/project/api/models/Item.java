@@ -5,10 +5,12 @@
  */
 package com.project.api.models;
 
-import com.project.api.oraclesql.DataType;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.project.api.oraclesql.DataType;
+import com.project.api.oraclesql.TableColumn;
 
 /**
  *
@@ -17,16 +19,16 @@ import java.util.Map;
 public class Item {
     
     private Map<Object, Object> propertyValue;
-    private Map<Object, DataType> propertyDataType;
+    private Map<Object, TableColumn> propertyColumn;
     
     public Item() {
         propertyValue = new HashMap<>();
-        propertyDataType = new HashMap<>();
+        propertyColumn = new HashMap<>();
     }
     
-    public void addItemPropertyValue(Object propertyId, Object value, DataType dataType) {
+    public void addItemPropertyValue(Object propertyId, Object value, TableColumn tableColumn) {
         setValue(propertyId, value);
-        setDataType(propertyId, dataType);
+        setColumn(propertyId, tableColumn);
     }
     
     public Object getValue(Object propertyId) {
@@ -34,10 +36,13 @@ public class Item {
             case VARCHAR2:
             case VARCHAR:
                 return (String) propertyValue.get(propertyId);
-            case NUMBER:
-                return (Long) propertyValue.get(propertyId);
             case CHAR:
                 return (Character) propertyValue.get(propertyId);
+            case NUMBER:
+            	if(hasScale(propertyId)) {
+            		return (Double) propertyValue.get(propertyId);
+            	}
+            	return (Long) propertyValue.get(propertyId);
             case DATE:
                 return (Date) propertyValue.get(propertyId);
             default:
@@ -50,11 +55,15 @@ public class Item {
     }
     
     private DataType getDataType(Object propertyId) {
-        return propertyDataType.get(propertyId);
+        return propertyColumn.get(propertyId).getDataType();
     }
     
-    private void setDataType(Object propertyId, DataType dataType) {
-        propertyDataType.put(propertyId, dataType);
+    private void setColumn(Object propertyId, TableColumn tableColumn) {
+        propertyColumn.put(propertyId, tableColumn);
+    }
+    
+    private boolean hasScale(Object propertyId) {
+    	return propertyColumn.get(propertyId).getScale() != null;
     }
     
 }

@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.project.api.models;
+package com.project.api.models.user;
+
+import java.util.Date;
 
 /**
  *
@@ -49,20 +51,20 @@ public class User {
     	return password;
     }
     
-    private String getLastLoginDate() {
+    private Date getLastLoginDate() {
     	return lastLoginDate;
     }
     
     public void setAttribute(UserAttribute attribute, Object value) {
     	switch(attribute) {
 			case ATTRIBUTE_USER_ID:
-				return setId(value);
+				setId((Integer)value);
 			case ATTRIBUTE_USER_NAME:
-				return setUsername(value);
+				setUsername((String)value);
 			case ATTRIBUTE_USER_PASSWORD:
-				return setPassword(value);
+				setPassword((String)value);
 			case ATTRIBUTE_USER_LAST_LOGIN_DATE:
-				return setLastLoginDate(value);
+				setLastLoginDate((Date)value);
 		}
     }
     

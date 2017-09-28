@@ -3,12 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.project.api.models;
+package com.project.api.app;
 
-import com.project.api.oraclesql.DataType;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import com.project.api.models.user.User;
 
 /**
  *
@@ -17,24 +14,24 @@ import java.util.Map;
 public class Session {
 	
 	private static Session session = null;
-	private static User loggedUser = null;
+	private User loggedUser = null;
 	
 	private Session() {
 	}
 	
-	public Session get() {
+	public static Session get() {
 		if(session == null) {
 			session = new Session();
 		}
 		return session;
 	}
     
-	private static User getLoggedUser() {
+	public User getLoggedUser() {
     	return loggedUser;
     }
     
-    private static void setLoggedUser(User user) {
-    	this.user = user;
+    public void setLoggedUser(User loggedUser) {
+    	this.loggedUser = loggedUser;
     }
     
 }
