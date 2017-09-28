@@ -5,9 +5,12 @@
  */
 package com.project.api.oraclesql;
 
+import com.project.api.app.Property;
+import com.project.api.app.Property.PropertyPath;
 import com.project.api.models.ConnectionConfiguration;
 import com.project.api.models.constants.ConfigurationConstants;
 import com.project.api.utils.FileUtils;
+
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -24,7 +27,6 @@ public class OracleConnection {
     private static Connection connection = null;
     private static ConnectionConfiguration connectionConfig = null;
 
-    private final String CONFIG_FILE = "config.properties";
     private final String ORACLE_JDBC_DRIVER = "oracle.jdbc.driver.OracleDriver";
 
     public OracleConnection() throws IOException, FileNotFoundException {
@@ -42,7 +44,7 @@ public class OracleConnection {
     }
 
     private void getConnectionParameters() throws IOException, FileNotFoundException {
-        BufferedReader br = FileUtils.getFileReader(CONFIG_FILE);
+        BufferedReader br = FileUtils.getFileReader(Property.getPropertyFile(PropertyPath.CONFIGURATION).getPathFile());
         String content = "";
         connectionConfig = new ConnectionConfiguration();
 

@@ -15,7 +15,11 @@ import java.io.Serializable;
  */
 public class ConnectionConfiguration implements Serializable {
 
-    private String connection;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String connection;
     private String username;
     private String password;
     private String hostname;

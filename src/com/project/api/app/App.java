@@ -17,6 +17,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.project.api.app.Property.PropertyPath;
 import com.project.api.models.user.User;
 import com.project.api.oraclesql.DataType;
 import com.project.api.oraclesql.OracleConnection;
@@ -33,169 +34,179 @@ import com.project.api.utils.FileUtils;
  */
 public class App {
 
-    private static OracleConnection oracleConnection = null;
-    private static List<Table> tables = null;
-    private static List<String> tableNames = null;
-    private static List<String> sequenceNames = null;
+	private static OracleConnection oracleConnection = null;
+	private static List<Table> tables = null;
+	private static List<String> tableNames = null;
+	private static List<String> sequenceNames = null;
 
-    private static final String PROJECT_FILE = "application.properties";
+	private static final int IDX_TABLE_NAME = 3;
 
-    private static final int IDX_TABLE_NAME = 3;
-    
-    private static final Boolean TRUE = true;
-    private static final Boolean FALSE = false;
-    
-    private static final String TABLE_IDX = "TABLE=";
-    private static final String SEQUENCE_IDX = "SEQUENCE=";
+	private static final Boolean TRUE = true;
+	private static final Boolean FALSE = false;
 
-    public static Connection getConnection() throws IOException, FileNotFoundException {
-        if (oracleConnection == null) {
-            oracleConnection = new OracleConnection();
-        }
+	private static final String TABLE_IDX = "TABLE=";
+	private static final String SEQUENCE_IDX = "SEQUENCE=";
 
-        return oracleConnection.getConnection();
-    }
+	public static Connection getConnection() throws IOException,
+			FileNotFoundException {
+		if (oracleConnection == null) {
+			oracleConnection = new OracleConnection();
+		}
 
-    public static List<Table> getTables() {
-        if (tables == null) {
-            tables = new ArrayList<>();
-        } else {
-            return tables;
-        }
+		return oracleConnection.getConnection();
+	}
 
-        Schema schema = null;
-        try {
-            Connection connection = getConnection();
-            DatabaseMetaData metaData = connection.getMetaData();
-            schema = oracleConnection.getConnectionConfiguration().getSchema();
-            ResultSet rs = metaData.getTables(null,
-                    schema == null ? null : schema.getSchemaName().toUpperCase(),
-                    "%",
-                    null);
-            Statement statement = connection.createStatement();
-            while (rs.next()) {
-                String tableName = rs.getString(IDX_TABLE_NAME);
-                if (getTablesFromProperties().contains(tableName)) {
-                    @SuppressWarnings("null")
-                    Table table = (schema == null) ? new Table(tableName) : new Table(tableName, schema);
-                    Select select = Select.createSelectInstance().tableFields().from(table);
-                    ResultSet sResultSet = statement.executeQuery(select.getQueryString());
-                    ResultSetMetaData resultSetMetaData = sResultSet.getMetaData();
-                    int numberOfColumns = resultSetMetaData.getColumnCount();
-                    for (int i = 1; i <= numberOfColumns; i++) {
-                        String columnName = resultSetMetaData.getColumnName(i);
-                        DataType columnTypeName = DataType.getDataType(resultSetMetaData.getColumnTypeName(i));
-                        int columnDisplaySize = resultSetMetaData.getColumnDisplaySize(i);
-                        int columnPrecision = resultSetMetaData.getPrecision(i);
-                        int columnScale = resultSetMetaData.getScale(i);
-                        boolean isNullable = resultSetMetaData.isNullable(i) == 1 ? TRUE : FALSE;
-                        
-                        TableColumn tableColumn = new TableColumn(columnName, columnTypeName,
-                                columnDisplaySize, columnPrecision,
-                                columnScale, isNullable);
+	public static List<Table> getTables() {
+		if (tables == null) {
+			tables = new ArrayList<>();
+		} else {
+			return tables;
+		}
 
-                        table.addTableColumnName(columnName);
-                        table.addTableColumn(tableColumn);
-                        table.addToTableColumnMapping(columnName, tableColumn);
-                    }
-                    tables.add(table);
-                }
-            }
-        } catch (IOException | SQLException exc) {
-            exc.printStackTrace();
-        }
-        
-        for(Table table : tables) {
-            for(String sequenceName : getSequences()) {
-                if(sequenceName.toUpperCase().indexOf(table.getTableName().toUpperCase()) == 0) {
-                    table.setSequence(new Sequence(schema, sequenceName));
-                }
-            }
-        }
+		Schema schema = null;
+		try {
+			Connection connection = getConnection();
+			DatabaseMetaData metaData = connection.getMetaData();
+			schema = oracleConnection.getConnectionConfiguration().getSchema();
+			ResultSet rs = metaData.getTables(null, schema == null ? null
+					: schema.getSchemaName().toUpperCase(), "%", null);
+			Statement statement = connection.createStatement();
+			while (rs.next()) {
+				String tableName = rs.getString(IDX_TABLE_NAME);
+				if (getTablesFromProperties().contains(tableName)) {
+					Table table = (schema == null) ? new Table(tableName)
+							: new Table(tableName, schema);
+					Select select = Select.createSelectInstance().tableFields()
+							.from(table);
+					ResultSet sResultSet = statement.executeQuery(select
+							.getQueryString());
+					ResultSetMetaData resultSetMetaData = sResultSet
+							.getMetaData();
+					int numberOfColumns = resultSetMetaData.getColumnCount();
+					for (int i = 1; i <= numberOfColumns; i++) {
+						String columnName = resultSetMetaData.getColumnName(i);
+						DataType columnTypeName = DataType
+								.getDataType(resultSetMetaData
+										.getColumnTypeName(i));
+						int columnDisplaySize = resultSetMetaData
+								.getColumnDisplaySize(i);
+						int columnPrecision = resultSetMetaData.getPrecision(i);
+						int columnScale = resultSetMetaData.getScale(i);
+						boolean isNullable = resultSetMetaData.isNullable(i) == 1 ? TRUE
+								: FALSE;
 
-        return tables;
-    }
-    
-    public static List<String> getSequences() {
-        try {
-            return getSequencesFromProperties();
-        } catch(FileNotFoundException exc) {
-            System.out.println("FileNotFoundException: " + exc.getMessage());
-        } catch(IOException exc) {
-            System.out.println("IOException: " + exc.getMessage());
-        }
-        return null;
-    }
-    
-    private static List<String> getSequencesFromProperties() throws IOException, FileNotFoundException {
-        if (sequenceNames == null) {
-            sequenceNames = new ArrayList<>();
-        } else {
-            return sequenceNames;
-        }
+						TableColumn tableColumn = new TableColumn(columnName,
+								columnTypeName, columnDisplaySize,
+								columnPrecision, columnScale, isNullable);
 
-        BufferedReader br = FileUtils.getFileReader(PROJECT_FILE);
-        String content = "";
-        while ((content = br.readLine()) != null) {
-            if(content.indexOf(SEQUENCE_IDX) == 0) {
-                sequenceNames.add(content.split("=")[1]);
-            }
-        }
+						table.addTableColumnName(columnName);
+						table.addTableColumn(tableColumn);
+						table.addToTableColumnMapping(columnName, tableColumn);
+					}
+					tables.add(table);
+				}
+			}
+		} catch (IOException | SQLException exc) {
+			exc.printStackTrace();
+		}
 
-        return tableNames;
-    }
+		for (Table table : tables) {
+			for (String sequenceName : getSequences()) {
+				if (sequenceName.toUpperCase().indexOf(
+						table.getTableName().toUpperCase()) == 0) {
+					table.setSequence(new Sequence(schema, sequenceName));
+				}
+			}
+		}
 
-    public static Table getTable(String tableName) {
-        for (Table table : tables) {
-            if (table.getTableName().equalsIgnoreCase(tableName)) {
-                return table;
-            }
-        }
-        return null;
-    }
+		return tables;
+	}
 
-    public static List<TableColumn> getTableColumns(Table _table) {
-        for (Table table : tables) {
-            if (table == _table) {
-                return table.getTableColumns();
-            }
-        }
-        return null;
-    }
+	public static List<String> getSequences() {
+		try {
+			return getSequencesFromProperties();
+		} catch (FileNotFoundException exc) {
+			System.out.println("FileNotFoundException: " + exc.getMessage());
+		} catch (IOException exc) {
+			System.out.println("IOException: " + exc.getMessage());
+		}
+		return null;
+	}
 
-    public static TableColumn getTableColumn(Table _table, String tableColumnName) {
-        for (Table table : tables) {
-            if (table == _table) {
-                return table.getTableColumn(tableColumnName);
-            }
-        }
-        return null;
-    }
+	private static List<String> getSequencesFromProperties()
+			throws IOException, FileNotFoundException {
+		if (sequenceNames == null) {
+			sequenceNames = new ArrayList<>();
+		} else {
+			return sequenceNames;
+		}
 
-    private static List<String> getTablesFromProperties() throws IOException, FileNotFoundException {
-        if (tableNames == null) {
-            tableNames = new ArrayList<>();
-        } else {
-            return tableNames;
-        }
+		BufferedReader br = FileUtils.getFileReader(Property.getPropertyFile(
+				PropertyPath.APPLICATION).getPathFile());
+		String content = "";
+		while ((content = br.readLine()) != null) {
+			if (content.indexOf(SEQUENCE_IDX) == 0) {
+				sequenceNames.add(content.split("=")[1]);
+			}
+		}
 
-        BufferedReader br = FileUtils.getFileReader(PROJECT_FILE);
-        String content = "";
-        while ((content = br.readLine()) != null) {
-            if(content.indexOf(TABLE_IDX) == 0) {
-                tableNames.add(content.split("=")[1]);
-            }
-        }
+		return tableNames;
+	}
 
-        return tableNames;
-    }
-    
-    public static User getLoggedUser() {
-    	return Session.get().getLoggedUser();
-    }
-    
-    public static void setLoggedUser(User user) {
-    	Session.get().setLoggedUser(user);
-    }
+	public static Table getTable(String tableName) {
+		for (Table table : tables) {
+			if (table.getTableName().equalsIgnoreCase(tableName)) {
+				return table;
+			}
+		}
+		return null;
+	}
+
+	public static List<TableColumn> getTableColumns(Table _table) {
+		for (Table table : tables) {
+			if (table == _table) {
+				return table.getTableColumns();
+			}
+		}
+		return null;
+	}
+
+	public static TableColumn getTableColumn(Table _table,
+			String tableColumnName) {
+		for (Table table : tables) {
+			if (table == _table) {
+				return table.getTableColumn(tableColumnName);
+			}
+		}
+		return null;
+	}
+
+	private static List<String> getTablesFromProperties() throws IOException,
+			FileNotFoundException {
+		if (tableNames == null) {
+			tableNames = new ArrayList<>();
+		} else {
+			return tableNames;
+		}
+
+		BufferedReader br = FileUtils.getFileReader(Property.getPropertyFile(
+				PropertyPath.APPLICATION).getPathFile());
+		String content = "";
+		while ((content = br.readLine()) != null) {
+			if (content.indexOf(TABLE_IDX) == 0) {
+				tableNames.add(content.split("=")[1]);
+			}
+		}
+
+		return tableNames;
+	}
+
+	public static User getLoggedUser() {
+		return Session.get().getLoggedUser();
+	}
+
+	public static void setLoggedUser(User user) {
+		Session.get().setLoggedUser(user);
+	}
 
 }
