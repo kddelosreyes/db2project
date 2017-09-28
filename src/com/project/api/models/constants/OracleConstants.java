@@ -13,7 +13,6 @@ public class OracleConstants {
 
     public static final String SQL_CREATE_TABLE = "CREATE TABLE ";
     public static final String SQL_CREATE_USER = "CREATE USER ";
-    public static final String SQL_CREATE_SEQUENCE = "CREATE SEQUENCE ";
 
     /*
     * DATA TYPES
@@ -33,11 +32,6 @@ public class OracleConstants {
     public static final String SQL_IDENTIFIED_BY = " IDENTIFIED BY ";
     public static final String SQL_GRANT_ALL_PRIVILEGES_TO = "GRANT ALL PRIVILEGES TO ";
 
-    public static final String SQL_STARTS_WITH = " START WITH ";
-    public static final String SQL_INCREMENT_BY = " INCREMENT BY ";
-    public static final String SQL_MINVALUE = " MINVALUE ";
-    public static final String SQL_MAXVALUE = " MAXVALUE ";
-    public static final String SQL_CYCLE = " CYCLE ";
-    public static final String SQL_NO_CYCLE = " NO CYCLE ";
+    
 
 }

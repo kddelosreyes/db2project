@@ -5,7 +5,6 @@
  */
 package com.project.api.oraclesql;
 
-import com.project.api.models.constants.OracleConstants;
 
 /**
  *
@@ -13,83 +12,93 @@ import com.project.api.models.constants.OracleConstants;
  */
 public class Sequence {
 
-    private Schema schema;
-    private String sequenceName;
-    private Integer startValue;
-    private Integer incrementValue;
-    private Integer minimumValue;
-    private Integer maximumValue;
-    private Boolean hasCycle;
+	private static final String CREATE_SEQUENCE = "CREATE SEQUENCE ";
+	private static final String STARTS_WITH = " START WITH ";
+	private static final String INCREMENT_BY = " INCREMENT BY ";
+	private static final String MINVALUE = " MINVALUE ";
+	private static final String MAXVALUE = " MAXVALUE ";
+	private static final String CYCLE = " CYCLE ";
+	private static final String NO_CYCLE = " NO CYCLE ";
 
-    public Sequence() {
-    }
-    
-    public Sequence(Schema schema, String sequenceName) {
-        this.schema = schema;
-        this.sequenceName = sequenceName;
-    }
+	private Schema schema;
+	private String sequenceName;
+	private Integer startValue;
+	private Integer incrementValue;
+	private Integer minimumValue;
+	private Integer maximumValue;
+	private Boolean hasCycle;
 
-    public Sequence(Schema schema, String sequenceName, Integer startValue,
-            Integer incrementValue, Integer minimumValue, Integer maximumValue,
-            Boolean hasCycle) {
-        this.schema = schema;
-        this.sequenceName = sequenceName;
-        this.startValue = startValue;
-        this.incrementValue = incrementValue;
-        this.minimumValue = minimumValue;
-        this.maximumValue = maximumValue;
-        this.hasCycle = hasCycle;
-    }
+	public Sequence() {
+	}
 
-    public Schema getSchema() {
-        return schema;
-    }
+	public Sequence(Schema schema, String sequenceName) {
+		this.schema = schema;
+		this.sequenceName = sequenceName;
+	}
 
-    public String getSequenceName() {
-        return sequenceName;
-    }
+	public Sequence(Schema schema, String sequenceName, Integer startValue,
+			Integer incrementValue, Integer minimumValue, Integer maximumValue,
+			Boolean hasCycle) {
+		this.schema = schema;
+		this.sequenceName = sequenceName;
+		this.startValue = startValue;
+		this.incrementValue = incrementValue;
+		this.minimumValue = minimumValue;
+		this.maximumValue = maximumValue;
+		this.hasCycle = hasCycle;
+	}
 
-    public Integer getStartValue() {
-        return startValue;
-    }
+	public Schema getSchema() {
+		return schema;
+	}
 
-    public Integer getIncrementValue() {
-        return incrementValue;
-    }
+	public String getSequenceName() {
+		return sequenceName;
+	}
 
-    public Integer getMinimumValue() {
-        return minimumValue;
-    }
+	public Integer getStartValue() {
+		return startValue;
+	}
 
-    public Integer getMaximumValue() {
-        return maximumValue;
-    }
+	public Integer getIncrementValue() {
+		return incrementValue;
+	}
 
-    public Boolean hasCycle() {
-        return hasCycle;
-    }
+	public Integer getMinimumValue() {
+		return minimumValue;
+	}
 
-    @Override
-    public String toString() {
-        String queryString = OracleConstants.SQL_CREATE_SEQUENCE + (getSchema().getSchemaName() != null ? getSchema().getSchemaName() + "." : "") + getSequenceName();
+	public Integer getMaximumValue() {
+		return maximumValue;
+	}
 
-        if (startValue != null) {
-            queryString = queryString + OracleConstants.SQL_STARTS_WITH + getStartValue();
-        }
-        if (incrementValue != null) {
-            queryString = queryString + OracleConstants.SQL_INCREMENT_BY + getIncrementValue();
-        }
-        if (minimumValue != null) {
-            queryString = queryString + OracleConstants.SQL_MINVALUE + getMinimumValue();
-        }
-        if (maximumValue != null) {
-            queryString = queryString + OracleConstants.SQL_MAXVALUE + getMaximumValue();
-        }
-        if (hasCycle != null) {
-            queryString = queryString + (hasCycle ? OracleConstants.SQL_CYCLE : OracleConstants.SQL_NO_CYCLE);
-        }
+	public Boolean hasCycle() {
+		return hasCycle;
+	}
 
-        return queryString + ";";
-    }
+	@Override
+	public String toString() {
+		String queryString = CREATE_SEQUENCE
+				+ (getSchema().getSchemaName() != null ? getSchema()
+						.getSchemaName() + "." : "") + getSequenceName();
+
+		if (startValue != null) {
+			queryString = queryString + STARTS_WITH + getStartValue();
+		}
+		if (incrementValue != null) {
+			queryString = queryString + INCREMENT_BY + getIncrementValue();
+		}
+		if (minimumValue != null) {
+			queryString = queryString + MINVALUE + getMinimumValue();
+		}
+		if (maximumValue != null) {
+			queryString = queryString + MAXVALUE + getMaximumValue();
+		}
+		if (hasCycle != null) {
+			queryString = queryString + (hasCycle ? CYCLE : NO_CYCLE);
+		}
+
+		return queryString + ";";
+	}
 
 }
