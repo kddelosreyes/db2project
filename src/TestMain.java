@@ -2,6 +2,9 @@
 import com.project.api.app.App;
 import com.project.api.oraclesql.Table;
 import com.project.api.oraclesql.TableColumn;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.List;
 
 /*
@@ -16,17 +19,22 @@ import java.util.List;
 public class TestMain {
 
     public static void main(String[] args) throws Exception {
-        List<Table> tables = App.getTables();
-        for(Table table : tables) {
-            System.out.println("TABLE NAME: " + table.getTableName());
-            for(TableColumn tableColumn : table.getTableColumns()) {
-                System.out.println(tableColumn.getColumnName());
-                System.out.println(tableColumn.getDataType());
-                System.out.println(tableColumn.getLength());
-                System.out.println(tableColumn.getPrecision());
-                System.out.println(tableColumn.getScale());
-                System.out.println(tableColumn.getIsNull());
-            }
+        Connection conn = App.getConnection();
+        Statement st = conn.createStatement();
+        ResultSet rs = st.executeQuery("select * from userstable");
+        System.out.println(rs.next());
+        while(rs.next()) {
+            System.out.println(rs.getString("username"));
         }
+        
+//        List<Table> tables = App.getTables();
+//        for(Table table : tables) {
+//            for(TableColumn col : table.getTableColumns()) {
+//                System.out.println(col.getColumnName());
+//                System.out.println(col.getDataType());
+//                System.out.println(col.getLength());
+//                System.out.println("=========================");
+//            }
+//        }
     }
 }
