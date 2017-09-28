@@ -10,11 +10,11 @@ package com.project.api.oraclesql;
  * @author Kim Howel delos Reyes
  */
 public enum JoinType {
-    
+
     LEFT_JOIN,
     RIGHT_JOIN,
     INNER_JOIN,
     JOIN,
     OUTER_JOIN;
-    
+
 }

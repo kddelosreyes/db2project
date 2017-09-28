@@ -12,7 +12,7 @@ import com.project.api.models.constants.OracleConstants;
  * @author Kim Howel delos Reyes
  */
 public class TableColumn {
-    
+
     private String columnName;
     private DataType dataType;
     private Integer length;
@@ -54,19 +54,19 @@ public class TableColumn {
     public void setLength(Integer length) {
         this.length = length;
     }
-    
+
     public Integer getPrecision() {
         return precision;
     }
-    
+
     public void setPresision(Integer precision) {
         this.precision = precision;
     }
-    
+
     public Integer getScale() {
         return scale;
     }
-    
+
     public void setScale(Integer scale) {
         this.scale = scale;
     }
@@ -78,12 +78,12 @@ public class TableColumn {
     public void setIsNull(Boolean isNull) {
         this.isNull = isNull;
     }
-    
+
     @Override
     public String toString() {
-        return getColumnName() + " " + getDataType().getValue() + 
-                "(" + getLength() + ")"
+        return getColumnName() + " " + getDataType().getValue()
+                + "(" + getLength() + ")"
                 + (isNull ? "" : " " + OracleConstants.SQL_NOT_NULL);
     }
-    
+
 }

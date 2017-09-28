@@ -14,62 +14,59 @@ import java.util.Map;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 
-import com.project.api.components.Component;
-
 /**
  *
  * @author Kim Howel delos Reyes
  */
 public class FormGroup extends JPanel {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
 
-	private String caption;
+    private static final int DEFAULT_HORIZONTAL_GAP = 10;
+    private static final int DEFAULT_VERTICAL_GAP = 10;
 
-	private static final int DEFAULT_HORIZONTAL_GAP = 10;
-	private static final int DEFAULT_VERTICAL_GAP = 10;
+    private String caption;
+    private List<Component> componentList;
+    private Map<Object, Component> componentMapping;
 
-	private List<Component> componentList;
-	private Map<Object, Component> componentMapping;
+    private FormGroup() {
+        componentList = new ArrayList<>();
+        componentMapping = new HashMap<>();
+    }
 
-	private FormGroup() {
-		componentList = new ArrayList<>();
-		componentMapping = new HashMap<>();
-	}
+    public FormGroup(String caption, int noOfColumns) {
+        this();
+        this.caption = caption;
+        super.setLayout(new GridLayout(0, noOfColumns, DEFAULT_HORIZONTAL_GAP,
+                DEFAULT_VERTICAL_GAP));
+        super.setBorder(new TitledBorder(null, caption, TitledBorder.LEFT,
+                TitledBorder.TOP));
+    }
 
-	public FormGroup(String caption, int noOfColumns) {
-		this();
-		this.caption = caption;
-		setLayout(new GridLayout(0, noOfColumns, DEFAULT_HORIZONTAL_GAP,
-				DEFAULT_VERTICAL_GAP));
-		setBorder(new TitledBorder(null, caption, TitledBorder.LEFT,
-				TitledBorder.TOP));
-	}
+    public void addComponent(Component component) {
+        add(component);
+        componentList.add(component);
+        componentMapping.put(component.getCaption(), component);
+    }
 
-	public void addComponent(Component component) {
-		add(component);
-		componentList.add(component);
-		componentMapping.put(component.getCaption(), component);
-	}
+    public void addComponents(Component... components) {
+        for (Component component : components) {
+            addComponent(component);
+        }
+    }
 
-	public void addComponents(Component... components) {
-		for (Component component : components) {
-			addComponent(component);
-		}
-	}
+    public Component getComponent(Object propertyId) {
+        return componentMapping.get(propertyId);
+    }
 
-	public Component getComponent(Object propertyId) {
-		return componentMapping.get(propertyId);
-	}
+    public List<Component> getAllComponents() {
+        return componentList;
+    }
 
-	public List<Component> getAllComponents() {
-		return componentList;
-	}
-
-	public String getCaption() {
-		return caption;
-	}
+    public String getCaption() {
+        return caption;
+    }
 }

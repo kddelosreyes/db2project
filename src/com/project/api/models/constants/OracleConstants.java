@@ -32,6 +32,4 @@ public class OracleConstants {
     public static final String SQL_IDENTIFIED_BY = " IDENTIFIED BY ";
     public static final String SQL_GRANT_ALL_PRIVILEGES_TO = "GRANT ALL PRIVILEGES TO ";
 
-    
-
 }

@@ -18,7 +18,7 @@ public class Select {
     public static final String SELECT = "SELECT ";
     public static final String FROM = "FROM ";
     public static final String ON = "ON ";
-    
+
     public static final String LEFT_JOIN = "LEFT JOIN ";
     public static final String RIGHT_JOIN = "RIGHT JOIN ";
     public static final String INNER_JOIN = "INNER JOIN ";
@@ -47,7 +47,7 @@ public class Select {
         queryString.deleteCharAt(queryString.length() - 2);
         return this;
     }
-    
+
     private void getTableSchema(Table table) {
         queryString.append(table.getSchema() == null
                 ? table.getTableName()
@@ -59,9 +59,9 @@ public class Select {
         getTableSchema(table);
         return this;
     }
-    
+
     public Select join(Table table, JoinType joinType) {
-        switch(joinType) {
+        switch (joinType) {
             case INNER_JOIN:
                 innerJoin();
                 break;
@@ -76,7 +76,7 @@ public class Select {
                 break;
             case JOIN:
                 join();
-                break;    
+                break;
         }
         getTableSchema(table);
         return this;
@@ -97,7 +97,7 @@ public class Select {
     private void join() {
         queryString.append(JOIN);
     }
-    
+
     private void outerJoin() {
         queryString.append(OUTER_JOIN);
     }

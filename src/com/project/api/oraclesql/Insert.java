@@ -39,21 +39,21 @@ public class Insert {
 
     public Insert into(List<TableColumn> tableColumns) {
         queryString.append(INTO + "(");
-        for(int idx = 0; idx < tableColumns.size(); idx++) {
+        for (int idx = 0; idx < tableColumns.size(); idx++) {
             queryString.append(tableColumns.get(idx).getColumnName());
-            if(idx != tableColumns.size() - 1) {
+            if (idx != tableColumns.size() - 1) {
                 queryString.append(",");
             }
         }
         queryString.append(") ");
         return this;
     }
-    
+
     public Insert values(List<Object> values) {
         queryString.append(VALUES + "(");
-        for(int idx = 0; idx < values.size(); idx++) {
+        for (int idx = 0; idx < values.size(); idx++) {
             queryString.append(values.get(idx));
-            if(idx != values.size() - 1) {
+            if (idx != values.size() - 1) {
                 queryString.append(",");
             }
         }

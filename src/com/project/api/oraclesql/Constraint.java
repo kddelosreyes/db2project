@@ -12,21 +12,21 @@ import com.project.api.models.constants.OracleConstants;
  * @author Kim Howel delos Reyes
  */
 public class Constraint {
-    
+
     public enum ConstraintType {
         PRIMARY_KEY,
         FOREIGN_KEY;
     }
-    
+
     private ConstraintType constraintType;
-    
+
     private String constraintName;
     private TableColumn[] primaryKeys;
-    
+
     private String tableFKey;
     private Table referenceTable;
     private TableColumn referenceTableColumn;
-    
+
     public Constraint(ConstraintType constraintType,
             String constraintName,
             TableColumn[] primaryKeys) {
@@ -34,7 +34,7 @@ public class Constraint {
         this.constraintName = constraintName;
         this.primaryKeys = primaryKeys;
     }
-    
+
     public Constraint(ConstraintType constraintType,
             String tableFKey,
             Table referenceTable,
@@ -68,27 +68,27 @@ public class Constraint {
     public TableColumn getReferenceTableColumn() {
         return referenceTableColumn;
     }
-    
+
     @Override
     public String toString() {
-        if(getConstraintType() == ConstraintType.PRIMARY_KEY) {
-            return OracleConstants.SQL_CONSTRAINT + " " + getConstraintName() + " " +
-                    OracleConstants.SQL_PRIMARY_KEY + "(" + getTableColumns() + ")";
-        } else if(getConstraintType() == ConstraintType.FOREIGN_KEY) {
-            return OracleConstants.SQL_CONSTRAINT + " " + getConstraintName() + " " +
-                    OracleConstants.SQL_FOREIGN_KEY + "(" + getTableFKey() + ")" +
-                    OracleConstants.SQL_REFERENCES + getReferenceTable().getTableName() + 
-                    "(" +getReferenceTableColumn().getColumnName() + ")";
+        if (getConstraintType() == ConstraintType.PRIMARY_KEY) {
+            return OracleConstants.SQL_CONSTRAINT + " " + getConstraintName() + " "
+                    + OracleConstants.SQL_PRIMARY_KEY + "(" + getTableColumns() + ")";
+        } else if (getConstraintType() == ConstraintType.FOREIGN_KEY) {
+            return OracleConstants.SQL_CONSTRAINT + " " + getConstraintName() + " "
+                    + OracleConstants.SQL_FOREIGN_KEY + "(" + getTableFKey() + ")"
+                    + OracleConstants.SQL_REFERENCES + getReferenceTable().getTableName()
+                    + "(" + getReferenceTableColumn().getColumnName() + ")";
         }
         return null;
     }
-    
+
     private String getTableColumns() {
         String tableColumns = "";
-        for(TableColumn tableColumn : getPrimaryKeys()) {
+        for (TableColumn tableColumn : getPrimaryKeys()) {
             tableColumns += tableColumn.getColumnName() + ",";
         }
         return tableColumns.substring(0, tableColumns.length() - 1);
     }
-    
+
 }
