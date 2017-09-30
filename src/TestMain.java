@@ -19,22 +19,22 @@ import java.util.List;
 public class TestMain {
 
     public static void main(String[] args) throws Exception {
-        Connection conn = App.getConnection();
+        /*Connection conn = App.getConnection();
         Statement st = conn.createStatement();
         ResultSet rs = st.executeQuery("select * from userstable");
         System.out.println(rs.next());
         while(rs.next()) {
             System.out.println(rs.getString("username"));
-        }
+        }*/
         
-//        List<Table> tables = App.getTables();
-//        for(Table table : tables) {
-//            for(TableColumn col : table.getTableColumns()) {
-//                System.out.println(col.getColumnName());
-//                System.out.println(col.getDataType());
-//                System.out.println(col.getLength());
-//                System.out.println("=========================");
-//            }
-//        }
+        List<Table> tables = App.getTables();
+        for(Table table : tables) {
+            for(TableColumn col : table.getTableColumns()) {
+                System.out.println(col.getColumnName());
+                System.out.println(col.getDataType());
+                System.out.println(col.getLength());
+                System.out.println("=========================");
+            }
+        }
     }
 }

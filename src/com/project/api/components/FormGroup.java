@@ -30,6 +30,7 @@ public class FormGroup extends JPanel {
 
     private String caption;
     private List<Component> componentList;
+    private List<Component> readOnlyComponents;
     private Map<Object, Component> componentMapping;
 
     private FormGroup() {
@@ -50,6 +51,11 @@ public class FormGroup extends JPanel {
         add(component);
         componentList.add(component);
         componentMapping.put(component.getCaption(), component);
+    }
+    
+    public void addReadOnlyComponent(Component component) {
+        addComponent(component);
+        readOnlyComponents.add(component);
     }
 
     public void addComponents(Component... components) {

@@ -5,7 +5,8 @@
  */
 package com.project.api.utils;
 
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Currency;
 
 /**
  *
@@ -13,17 +14,49 @@ import java.text.DecimalFormat;
  */
 public class NumberFormatUtils {
 
-    public static final String DECIMAL_FORMAT = "###,###.##";
-    public static final String INTEGER_FORMAT = "###,###";
+    private static final Currency currency = Currency.getInstance("en_PH");
+    
+    private static final NumberFormat decimalFormat;
+    private static final NumberFormat integerFormat;
+    private static final NumberFormat currencyFormat;
+    private static final NumberFormat percentageFormat;
 
-    public static final String DECIMAL_FORMAT_2ZEROS = "###,##0.00";
-    public static final String DECIMAL_FORMAT_3ZEROS = "###,##0.000";
-    public static final String DECIMAL_FORMAT_4ZEROS = "###,##0.0000";
-    public static final String DECIMAL_FORMAT_5ZEROS = "###,##0.00000";
-    public static final String DECIMAL_FORMAT_6ZEROS = "###,##0.000000";
-
-    public static String formatValue(DecimalFormat formatter, Number value) {
-        return formatter.format(value);
+    static {
+        decimalFormat = NumberFormat.getNumberInstance();
+        decimalFormat.setMaximumFractionDigits(2);
+        decimalFormat.setMinimumFractionDigits(2);
+        
+        integerFormat = NumberFormat.getIntegerInstance();
+        
+        currencyFormat = NumberFormat.getCurrencyInstance();
+        currencyFormat.setGroupingUsed(true);
+        currencyFormat.setMaximumFractionDigits(2);
+        currencyFormat.setMinimumFractionDigits(2);
+        currencyFormat.setCurrency(currency);
+        
+        percentageFormat = NumberFormat.getPercentInstance();
+        percentageFormat.setMaximumFractionDigits(2);
+        percentageFormat.setMinimumFractionDigits(2);
+    }
+    
+    public static String formatValue(NumberFormat numberFormat, Number value) {
+        return numberFormat.format(value);
+    }
+    
+    public static NumberFormat getIntegerFormat() {
+        return integerFormat;
+    }
+    
+    public static NumberFormat getDecimalFormat() {
+        return decimalFormat;
+    }
+    
+    public static NumberFormat getCurrencyFormat() {
+        return currencyFormat;
+    }
+    
+    public static NumberFormat getPercentageFormat() {
+        return percentageFormat;
     }
 
 }

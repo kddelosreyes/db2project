@@ -18,8 +18,8 @@ import com.project.api.oraclesql.TableColumn;
  */
 public class Item {
 
-    private Map<Object, Object> propertyValue;
-    private Map<Object, TableColumn> propertyColumn;
+    private final Map<Object, Object> propertyValue;
+    private final Map<Object, TableColumn> propertyColumn;
 
     public Item() {
         propertyValue = new HashMap<>();
