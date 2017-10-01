@@ -5,8 +5,8 @@
  */
 package com.project.api.utils;
 
-import java.text.NumberFormat;
-import java.util.Currency;
+import java.util.function.UnaryOperator;
+import javafx.scene.control.TextFormatter;
 
 /**
  *
@@ -14,49 +14,28 @@ import java.util.Currency;
  */
 public class NumberFormatUtils {
 
-    private static final Currency currency = Currency.getInstance("en_PH");
-    
-    private static final NumberFormat decimalFormat;
-    private static final NumberFormat integerFormat;
-    private static final NumberFormat currencyFormat;
-    private static final NumberFormat percentageFormat;
+    private static final UnaryOperator<TextFormatter.Change> INTEGER_FILTER = change -> {
+        String newText = change.getControlNewText();
+        if (newText.matches("-?([1-9][0-9]*)?")) {
+            return change;
+        }
+        return null;
+    };
 
-    static {
-        decimalFormat = NumberFormat.getNumberInstance();
-        decimalFormat.setMaximumFractionDigits(2);
-        decimalFormat.setMinimumFractionDigits(2);
-        
-        integerFormat = NumberFormat.getIntegerInstance();
-        
-        currencyFormat = NumberFormat.getCurrencyInstance();
-        currencyFormat.setGroupingUsed(true);
-        currencyFormat.setMaximumFractionDigits(2);
-        currencyFormat.setMinimumFractionDigits(2);
-        currencyFormat.setCurrency(currency);
-        
-        percentageFormat = NumberFormat.getPercentInstance();
-        percentageFormat.setMaximumFractionDigits(2);
-        percentageFormat.setMinimumFractionDigits(2);
+    private static final UnaryOperator<TextFormatter.Change> DECIMAL_FILTER = change -> {
+        String newText = change.getControlNewText();
+        if (newText.matches("\\\\d{0,7}([\\\\.]\\\\d{0,4})?")) {
+            return change;
+        }
+        return null;
+    };
+
+    public static UnaryOperator<TextFormatter.Change> getIntegerFilter() {
+        return INTEGER_FILTER;
     }
-    
-    public static String formatValue(NumberFormat numberFormat, Number value) {
-        return numberFormat.format(value);
-    }
-    
-    public static NumberFormat getIntegerFormat() {
-        return integerFormat;
-    }
-    
-    public static NumberFormat getDecimalFormat() {
-        return decimalFormat;
-    }
-    
-    public static NumberFormat getCurrencyFormat() {
-        return currencyFormat;
-    }
-    
-    public static NumberFormat getPercentageFormat() {
-        return percentageFormat;
+
+    public static UnaryOperator<TextFormatter.Change> getDecimalFilter() {
+        return DECIMAL_FILTER;
     }
 
 }
