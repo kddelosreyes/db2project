@@ -28,14 +28,19 @@ import javafx.scene.layout.GridPane;
  */
 public class DataTable extends GridPane {
 
-    private TableView table;
     private List<Item> items;
-    private Footer footer;
+    private TableView table = new TableView();
+    private Footer footer = new Footer(table);
+    private TextField searchField = new TextField();
 
     public DataTable(List<Item> items) {
         this.items = items;
-        table = new TableView();
-        footer = new Footer(table);
+        
+        init();
+    }
+    
+    private void init() {
+        searchField.setPromptText(I18nUI.getString(Translations.SEARCH));
     }
 
     private int getRecordsSize() {
@@ -122,12 +127,14 @@ public class DataTable extends GridPane {
             pageOptions.valueProperty().addListener(new ChangeListener<Integer>() {
                 @Override
                 public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
-                    
+                    if(!oldValue.equals(newValue)) {
+                        setDefaultState(newValue);
+                    }
                 }
             });
             add(pageOptions, 8, 0);
 
-            setDefaultState();
+            setDefaultState(null);
         }
 
         private void loadTableContent() {
@@ -155,9 +162,14 @@ public class DataTable extends GridPane {
             loadTableContent();
         }
 
-        private void setDefaultState() {
+        private void setDefaultState(Integer newValue) {
             loadButtonState(true, true, true, true);
-            pageOptions.setValue(DEFAULT_NO_OF_RECORDS);
+            
+            if(newValue == null) {
+                pageOptions.setValue(DEFAULT_NO_OF_RECORDS);
+            } else {
+                pageOptions.setValue(newValue);
+            }
             setCurrentPage(1);
         }
 

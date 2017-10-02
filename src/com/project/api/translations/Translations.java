@@ -16,6 +16,7 @@ public enum Translations {
     NEXT,
     LAST,
     SHOWING_OUT_OF_ENTRIES,
-    PAGE_SIZE;
+    PAGE_SIZE,
+    SEARCH;
     
 }
