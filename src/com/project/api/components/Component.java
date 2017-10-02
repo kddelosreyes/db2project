@@ -5,19 +5,11 @@
  */
 package com.project.api.components;
 
+import com.project.api.managers.FieldManager;
 import com.project.api.oraclesql.TableColumn;
-import com.project.api.utils.NumberFormatUtils;
-import javafx.geometry.Pos;
 import javafx.scene.control.Control;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.GridPane;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.util.converter.DoubleStringConverter;
-import javafx.util.converter.IntegerStringConverter;
 
 /**
  *
@@ -31,15 +23,6 @@ public class Component extends GridPane {
     private final String caption;
     private final TableColumn tableColumn;
 
-    private final String FONT_FACE = "Arial";
-    private final int CAPTION_FONT_SIZE = 8;
-    private final int FIELD_FONT_SIZE = 13;
-
-    private final Font CAPTION_FONT = Font.font(FONT_FACE, FontWeight.NORMAL, CAPTION_FONT_SIZE);
-    private final Font COMPONENT_FONT = Font.font(FONT_FACE, FontWeight.NORMAL, FIELD_FONT_SIZE);
-
-    
-
     private void init() {
         labelCaption = initializeLabel();
         componentField = initializeComponentField();
@@ -50,7 +33,7 @@ public class Component extends GridPane {
 
     private Label initializeLabel() {
         Label label = new Label(caption);
-        label.setFont(CAPTION_FONT);
+        label.setFont(FieldManager.CAPTION_FONT);
         return label;
     }
 
@@ -69,62 +52,19 @@ public class Component extends GridPane {
         switch (tableColumn.getDataType()) {
             case VARCHAR2:
             case VARCHAR:
-                return getStringTextField();
+                return FieldManager.getStringTextField();
             case CHAR:
-                return getCharTextField();
+                return FieldManager.getCharTextField();
             case NUMBER:
                 if (tableColumn.getPrecision() != null && tableColumn.getScale() != null) {
-                    return getDecimalTextField();
+                    return FieldManager.getDecimalTextField();
                 }
-                return getIntegerTextField();
+                return FieldManager.getIntegerTextField();
             case DATE:
-                return getDateField();
+                return FieldManager.getDateField();
             default:
                 return null;
         }
-    }
-
-    private TextField getStringTextField() {
-        TextField textField = getTextField(false, null);
-        textField.setAlignment(Pos.CENTER_LEFT);
-        return textField;
-    }
-
-    private TextField getCharTextField() {
-        TextField textField = getStringTextField();
-        textField.setPrefColumnCount(1);
-        return textField;
-    }
-
-    private DatePicker getDateField() {
-        DatePicker datePicker = new DatePicker();
-        datePicker.setShowWeekNumbers(true);
-        return datePicker;
-    }
-
-    private TextField getIntegerTextField() {
-        TextField textField = getNumericField(true, new TextFormatter<>(new IntegerStringConverter(), 0, NumberFormatUtils.getIntegerFilter()));
-        return textField;
-    }
-
-    private TextField getDecimalTextField() {
-        TextField textField = getNumericField(true, new TextFormatter<>(new DoubleStringConverter(), 0.00, NumberFormatUtils.getDecimalFilter()));
-        return textField;
-    }
-
-    private TextField getNumericField(boolean isFormatted, TextFormatter numberFormat) {
-        TextField textField = getTextField(isFormatted, numberFormat);
-        textField.setAlignment(Pos.CENTER_RIGHT);
-        return textField;
-    }
-
-    private TextField getTextField(boolean isFormatted, TextFormatter numberFormat) {
-        TextField textField = new TextField();
-        if (isFormatted) {
-            textField.setTextFormatter(numberFormat);
-        }
-        textField.setFont(COMPONENT_FONT);
-        return textField;
     }
 
     public void setEditable(boolean isEditable) {
