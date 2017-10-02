@@ -1,7 +1,7 @@
 
 import com.project.api.app.App;
 import com.project.api.oraclesql.Table;
-import com.project.api.oraclesql.TableColumn;
+import com.project.api.oraclesql.Column;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -29,7 +29,7 @@ public class TestMain {
         
         List<Table> tables = App.getTables();
         for(Table table : tables) {
-            for(TableColumn col : table.getTableColumns()) {
+            for(Column col : table.getTableColumns()) {
                 System.out.println(col.getColumnName());
                 System.out.println(col.getDataType());
                 System.out.println(col.getLength());

@@ -21,15 +21,15 @@ public class Constraint {
     private ConstraintType constraintType;
 
     private String constraintName;
-    private TableColumn[] primaryKeys;
+    private Column[] primaryKeys;
 
     private String tableFKey;
     private Table referenceTable;
-    private TableColumn referenceTableColumn;
+    private Column referenceTableColumn;
 
     public Constraint(ConstraintType constraintType,
             String constraintName,
-            TableColumn[] primaryKeys) {
+            Column[] primaryKeys) {
         this.constraintType = constraintType;
         this.constraintName = constraintName;
         this.primaryKeys = primaryKeys;
@@ -38,7 +38,7 @@ public class Constraint {
     public Constraint(ConstraintType constraintType,
             String tableFKey,
             Table referenceTable,
-            TableColumn referenceTableColumn) {
+            Column referenceTableColumn) {
         this.constraintType = constraintType;
         this.tableFKey = tableFKey;
         this.referenceTable = referenceTable;
@@ -53,7 +53,7 @@ public class Constraint {
         return constraintName;
     }
 
-    public TableColumn[] getPrimaryKeys() {
+    public Column[] getPrimaryKeys() {
         return primaryKeys;
     }
 
@@ -65,7 +65,7 @@ public class Constraint {
         return referenceTable;
     }
 
-    public TableColumn getReferenceTableColumn() {
+    public Column getReferenceTableColumn() {
         return referenceTableColumn;
     }
 
@@ -85,7 +85,7 @@ public class Constraint {
 
     private String getTableColumns() {
         String tableColumns = "";
-        for (TableColumn tableColumn : getPrimaryKeys()) {
+        for (Column tableColumn : getPrimaryKeys()) {
             tableColumns += tableColumn.getColumnName() + ",";
         }
         return tableColumns.substring(0, tableColumns.length() - 1);

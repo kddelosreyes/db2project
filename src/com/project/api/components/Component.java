@@ -7,6 +7,9 @@ package com.project.api.components;
 
 import com.project.api.managers.FieldManager;
 import com.project.api.oraclesql.TableColumn;
+import com.project.api.oraclesql.Column;
+import com.project.api.utils.NumberFormatUtils;
+import javafx.geometry.Pos;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
@@ -21,7 +24,7 @@ public class Component extends GridPane {
     private static Control componentField;
 
     private final String caption;
-    private final TableColumn tableColumn;
+    private final Column tableColumn;
 
     private void init() {
         labelCaption = initializeLabel();
@@ -37,7 +40,7 @@ public class Component extends GridPane {
         return label;
     }
 
-    public Component(String caption, TableColumn tableColumn) {
+    public Component(String caption, Column tableColumn) {
         this.caption = caption;
         this.tableColumn = tableColumn;
 
