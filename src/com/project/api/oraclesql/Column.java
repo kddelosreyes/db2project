@@ -11,7 +11,7 @@ import com.project.api.models.constants.OracleConstants;
  *
  * @author Kim Howel delos Reyes
  */
-public class TableColumn {
+public class Column {
 
     private String columnName;
     private DataType dataType;
@@ -20,7 +20,7 @@ public class TableColumn {
     private Integer scale;
     private Boolean isNull;
 
-    public TableColumn(String columnName, DataType dataType,
+    public Column(String columnName, DataType dataType,
             Integer length, Integer precision,
             Integer scale, Boolean isNull) {
         this.columnName = columnName;

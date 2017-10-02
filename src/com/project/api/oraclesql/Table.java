@@ -22,8 +22,8 @@ public class Table {
     private Schema schema;
     private Sequence sequence;
     private List<String> tableColumnNames;
-    private List<TableColumn> tableColumns;
-    private Map<String, TableColumn> tableColumnMapping;
+    private List<Column> tableColumns;
+    private Map<String, Column> tableColumnMapping;
     private List<Constraint> tableConstraints;
     private List<Item> tableItems;
 
@@ -74,11 +74,11 @@ public class Table {
         tableColumnNames.add(tableColumnName);
     }
 
-    public void addTableColumn(TableColumn tableColumn) {
+    public void addTableColumn(Column tableColumn) {
         tableColumns.add(tableColumn);
     }
 
-    public void addToTableColumnMapping(String tableColumnName, TableColumn tableColumn) {
+    public void addToTableColumnMapping(String tableColumnName, Column tableColumn) {
         tableColumnMapping.put(tableColumnName, tableColumn);
     }
 
@@ -94,11 +94,11 @@ public class Table {
         return tableColumnNames;
     }
 
-    public List<TableColumn> getTableColumns() {
+    public List<Column> getTableColumns() {
         return tableColumns;
     }
 
-    public Map<String, TableColumn> getTableColumnMapping() {
+    public Map<String, Column> getTableColumnMapping() {
         return tableColumnMapping;
     }
 
@@ -106,7 +106,7 @@ public class Table {
         return tableConstraints;
     }
 
-    public TableColumn getTableColumn(String tableColumnName) {
+    public Column getTableColumn(String tableColumnName) {
         return tableColumnMapping.get(tableColumnName);
     }
 

@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.project.api.oraclesql.DataType;
-import com.project.api.oraclesql.TableColumn;
+import com.project.api.oraclesql.Column;
 
 /**
  *
@@ -19,14 +19,14 @@ import com.project.api.oraclesql.TableColumn;
 public class Item {
 
     private final Map<Object, Object> propertyValue;
-    private final Map<Object, TableColumn> propertyColumn;
+    private final Map<Object, Column> propertyColumn;
 
     public Item() {
         propertyValue = new HashMap<>();
         propertyColumn = new HashMap<>();
     }
 
-    public void addItemPropertyValue(Object propertyId, Object value, TableColumn tableColumn) {
+    public void addItemPropertyValue(Object propertyId, Object value, Column tableColumn) {
         setValue(propertyId, value);
         setColumn(propertyId, tableColumn);
     }
@@ -58,7 +58,7 @@ public class Item {
         return propertyColumn.get(propertyId).getDataType();
     }
 
-    private void setColumn(Object propertyId, TableColumn tableColumn) {
+    private void setColumn(Object propertyId, Column tableColumn) {
         propertyColumn.put(propertyId, tableColumn);
     }
 

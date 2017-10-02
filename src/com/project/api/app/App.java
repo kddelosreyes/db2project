@@ -25,7 +25,7 @@ import com.project.api.oraclesql.Schema;
 import com.project.api.oraclesql.Select;
 import com.project.api.oraclesql.Sequence;
 import com.project.api.oraclesql.Table;
-import com.project.api.oraclesql.TableColumn;
+import com.project.api.oraclesql.Column;
 import com.project.api.utils.FileUtils;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -115,7 +115,7 @@ public class App {
                         boolean isNullable = resultSetMetaData.isNullable(i) == 1 ? TRUE
                                 : FALSE;
 
-                        TableColumn tableColumn = new TableColumn(columnName,
+                        Column tableColumn = new Column(columnName,
                                 columnTypeName, columnDisplaySize,
                                 columnPrecision, columnScale, isNullable);
                         log(Level.INFO, APP, GET_TABLES, tableName + "." + columnName);
@@ -186,7 +186,7 @@ public class App {
         return null;
     }
 
-    public static List<TableColumn> getTableColumns(Table _table) {
+    public static List<Column> getTableColumns(Table _table) {
         for (Table table : tables) {
             if (table == _table) {
                 return table.getTableColumns();
@@ -195,7 +195,7 @@ public class App {
         return null;
     }
 
-    public static TableColumn getTableColumn(Table _table,
+    public static Column getTableColumn(Table _table,
             String tableColumnName) {
         for (Table table : tables) {
             if (table == _table) {

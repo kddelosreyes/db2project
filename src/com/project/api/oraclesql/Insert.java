@@ -37,7 +37,7 @@ public class Insert {
         return this;
     }
 
-    public Insert into(List<TableColumn> tableColumns) {
+    public Insert into(List<Column> tableColumns) {
         queryString.append(INTO + "(");
         for (int idx = 0; idx < tableColumns.size(); idx++) {
             queryString.append(tableColumns.get(idx).getColumnName());

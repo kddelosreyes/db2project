@@ -5,7 +5,7 @@
  */
 package com.project.api.components;
 
-import com.project.api.oraclesql.TableColumn;
+import com.project.api.oraclesql.Column;
 import com.project.api.utils.NumberFormatUtils;
 import javafx.geometry.Pos;
 import javafx.scene.control.Control;
@@ -29,7 +29,7 @@ public class Component extends GridPane {
     private static Control componentField;
 
     private final String caption;
-    private final TableColumn tableColumn;
+    private final Column tableColumn;
 
     private final String FONT_FACE = "Arial";
     private final int CAPTION_FONT_SIZE = 8;
@@ -54,7 +54,7 @@ public class Component extends GridPane {
         return label;
     }
 
-    public Component(String caption, TableColumn tableColumn) {
+    public Component(String caption, Column tableColumn) {
         this.caption = caption;
         this.tableColumn = tableColumn;
 

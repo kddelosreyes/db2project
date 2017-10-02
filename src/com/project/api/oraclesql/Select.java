@@ -40,8 +40,8 @@ public class Select {
         return this;
     }
 
-    public Select tableFields(List<TableColumn> tableColumns, String tableName) {
-        for (TableColumn tableColumn : tableColumns) {
+    public Select tableFields(List<Column> tableColumns, String tableName) {
+        for (Column tableColumn : tableColumns) {
             queryString.append(tableName).append(".").append(tableColumn.getColumnName()).append(", ");
         }
         queryString.deleteCharAt(queryString.length() - 2);
@@ -102,7 +102,7 @@ public class Select {
         queryString.append(OUTER_JOIN);
     }
 
-    public Select on(TableColumn rightColumn, TableColumn leftColumn) {
+    public Select on(Column rightColumn, Column leftColumn) {
         queryString.append(rightColumn.getColumnName() + " = " + leftColumn.getColumnName());
         return this;
     }
