@@ -6,10 +6,7 @@
 package com.project.api.components;
 
 import com.project.api.managers.FieldManager;
-import com.project.api.oraclesql.TableColumn;
 import com.project.api.oraclesql.Column;
-import com.project.api.utils.NumberFormatUtils;
-import javafx.geometry.Pos;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;

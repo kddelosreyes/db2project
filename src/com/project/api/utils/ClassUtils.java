@@ -5,6 +5,10 @@
  */
 package com.project.api.utils;
 
+import java.util.Date;
+
+import com.project.api.oraclesql.Column;
+
 /**
  *
  * @author Kim Howel delos Reyes
@@ -16,6 +20,25 @@ public class ClassUtils {
     
     public static Object loadClass(String className) throws ClassNotFoundException {
     	return classLoader.loadClass(MODEL_PACKAGE + className);
+    }
+    
+    public static Class getWrapper(Column column) {
+    	switch(column.getDataType()) {
+	    	case VARCHAR:
+	    	case VARCHAR2:
+	    		return String.class;
+	    	case CHAR:
+	    		return Character.class;
+	    	case NUMBER:
+	    		if(column.getPrecision() != null && column.getScale() != null) {
+	    			return Double.class;
+	    		}
+	    		return Long.class;
+	    	case DATE:
+	    		return Date.class;
+	    	default:
+	    			return null;
+    	}
     }
     
 }

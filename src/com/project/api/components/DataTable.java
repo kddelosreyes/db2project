@@ -5,12 +5,9 @@
  */
 package com.project.api.components;
 
-import com.project.api.models.Item;
-import com.project.api.translations.I18nUI;
-import com.project.api.translations.Translations;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import javafx.beans.value.ChangeListener;
+
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,6 +19,14 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 
+import com.project.api.models.Item;
+import com.project.api.oraclesql.Column;
+import com.project.api.translations.I18nUI;
+import com.project.api.translations.Translations;
+import com.project.api.utils.ClassUtils;
+import java.util.ArrayList;
+import javafx.scene.control.TableColumn;
+
 /**
  *
  * @author Kim Howel delos Reyes
@@ -29,22 +34,45 @@ import javafx.scene.layout.GridPane;
 public class DataTable extends GridPane {
 
     private List<Item> items;
+    private List<TableColumn> tableColumns = new ArrayList<>();
     private TableView table = new TableView();
     private Footer footer = new Footer(table);
     private TextField searchField = new TextField();
 
+    private final TableFieldManager tableFieldManager = new TableFieldManager();
+
     public DataTable(List<Item> items) {
         this.items = items;
-        
+
         init();
     }
-    
+
     private void init() {
         searchField.setPromptText(I18nUI.getString(Translations.SEARCH));
     }
 
     private int getRecordsSize() {
         return items.size();
+    }
+
+    public void addTableColumn(Column column) {
+        Class<?> classDataType = ClassUtils.getWrapper(column);
+
+        if (String.class.equals(classDataType)) {
+            tableColumns.add(tableFieldManager.getStringTableColumn(column.getColumnName()));
+        } else if (Character.class.equals(classDataType)) {
+            tableColumns.add(tableFieldManager.getCharacterTableColumn(column.getColumnName()));
+        } else if (Double.class.equals(classDataType)) {
+            tableColumns.add(tableFieldManager.getDoubleTableColumn(column.getColumnName()));
+        } else if (Long.class.equals(classDataType)) {
+            tableColumns.add(tableFieldManager.getLongTableColumn(column.getColumnName()));
+        } else if (Date.class.equals(classDataType)) {
+            tableColumns.add(tableFieldManager.getDateTableColumn(column.getColumnName()));
+        }
+    }
+
+    public List<TableColumn> getTableColumns() {
+        return tableColumns;
     }
 
     private class Footer extends GridPane {
@@ -59,14 +87,14 @@ public class DataTable extends GridPane {
         private Button lastButton = new Button(I18nUI.getString(Translations.LAST));
         private Label entriesLabel = new Label(I18nUI.getString(Translations.SHOWING_OUT_OF_ENTRIES));
         private Label pageSizeLabel = new Label(I18nUI.getString(Translations.PAGE_SIZE));
-        private ComboBox pageOptions = new ComboBox(noOfRecords);
+        private ComboBox<Integer> pageOptions = new ComboBox<>(noOfRecords);
 
         private final int DEFAULT_NO_OF_RECORDS = 50;
 
-        private TableView table;
+        private TableView<Item> table;
         private int currentPage = 1;
 
-        public Footer(TableView table) {
+        public Footer(TableView<Item> table) {
             this.table = table;
             init();
         }
@@ -77,8 +105,7 @@ public class DataTable extends GridPane {
                 setCurrentPage(currentPage);
                 loadTableContent();
 
-                loadButtonState(true,
-                        true,
+                loadButtonState(true, true,
                         currentPage == getCurrentTotalPages(),
                         currentPage == getCurrentTotalPages());
             });
@@ -88,23 +115,19 @@ public class DataTable extends GridPane {
                 currentPage--;
                 setCurrentPage(currentPage);
 
-                loadButtonState(currentPage == 1,
-                        currentPage == 1,
-                        false,
+                loadButtonState(currentPage == 1, currentPage == 1, false,
                         false);
             });
             add(previousButton, 1, 0);
 
             add(currentPageField, 2, 0);
-
             add(totalPagesLabel, 3, 0);
 
             nextButton.setOnAction((ActionEvent e) -> {
                 currentPage++;
                 setCurrentPage(currentPage);
-                
-                loadButtonState(false,
-                        false,
+
+                loadButtonState(false, false,
                         currentPage == getCurrentTotalPages(),
                         currentPage == getCurrentTotalPages());
             });
@@ -114,32 +137,38 @@ public class DataTable extends GridPane {
                 currentPage = getCurrentTotalPages();
                 setCurrentPage(currentPage);
 
-                loadButtonState(true,
-                        true,
+                loadButtonState(true, true,
                         currentPage == getCurrentTotalPages(),
                         currentPage == getCurrentTotalPages());
             });
             add(lastButton, 5, 0);
-            
+
             add(entriesLabel, 6, 0);
             add(pageSizeLabel, 7, 0);
-            
-            pageOptions.valueProperty().addListener(new ChangeListener<Integer>() {
-                @Override
-                public void changed(ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) {
-                    if(!oldValue.equals(newValue)) {
-                        setDefaultState(newValue);
-                    }
+
+            pageOptions.valueProperty().addListener((ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) -> {
+                if (!oldValue.equals(newValue)) {
+                    setDefaultState(newValue);
                 }
             });
             add(pageOptions, 8, 0);
+        }
 
-            setDefaultState(null);
+        private void setDefaultState(Integer newValue) {
+            loadButtonState(true, true, true, true);
+
+            if (newValue == null) {
+                pageOptions.setValue(DEFAULT_NO_OF_RECORDS);
+            } else {
+                pageOptions.setValue(newValue);
+            }
+            setCurrentPage(1);
         }
 
         private void loadTableContent() {
             List<Item> temp = new ArrayList<>();
-            for (int i = (currentPage - 1) * getCurrentPageSize(); i < currentPage * getCurrentPageSize(); i++) {
+            for (int i = (currentPage - 1) * getCurrentPageSize(); i < currentPage
+                    * getCurrentPageSize(); i++) {
                 if (items.get(i) != null) {
                     temp.add(items.get(i));
                 } else {
@@ -160,17 +189,6 @@ public class DataTable extends GridPane {
         private void setCurrentPage(int currPage) {
             currentPageField.setText(String.valueOf(currPage));
             loadTableContent();
-        }
-
-        private void setDefaultState(Integer newValue) {
-            loadButtonState(true, true, true, true);
-            
-            if(newValue == null) {
-                pageOptions.setValue(DEFAULT_NO_OF_RECORDS);
-            } else {
-                pageOptions.setValue(newValue);
-            }
-            setCurrentPage(1);
         }
 
         private void loadButtonState(boolean first, boolean previous, boolean next, boolean last) {
