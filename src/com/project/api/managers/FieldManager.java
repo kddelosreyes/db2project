@@ -56,13 +56,13 @@ public class FieldManager {
         return textField;
     }
 
-    public static TextField getNumericField(boolean isFormatted, TextFormatter numberFormat) {
+    public static TextField getNumericField(boolean isFormatted, TextFormatter<?> numberFormat) {
         TextField textField = getTextField(isFormatted, numberFormat);
         textField.setAlignment(Pos.CENTER_RIGHT);
         return textField;
     }
 
-    public static TextField getTextField(boolean isFormatted, TextFormatter numberFormat) {
+    public static TextField getTextField(boolean isFormatted, TextFormatter<?> numberFormat) {
         TextField textField = new TextField();
         if (isFormatted) {
             textField.setTextFormatter(numberFormat);

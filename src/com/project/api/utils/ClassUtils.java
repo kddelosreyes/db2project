@@ -22,7 +22,7 @@ public class ClassUtils {
     	return classLoader.loadClass(MODEL_PACKAGE + className);
     }
     
-    public static Class getWrapper(Column column) {
+    public static Class<?> getWrapper(Column column) {
     	switch(column.getDataType()) {
 	    	case VARCHAR:
 	    	case VARCHAR2:

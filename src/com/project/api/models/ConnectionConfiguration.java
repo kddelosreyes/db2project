@@ -5,9 +5,9 @@
  */
 package com.project.api.models;
 
-import com.project.api.models.constants.ConfigurationConstants;
-import com.project.api.oraclesql.Schema;
 import java.io.Serializable;
+
+import com.project.api.oraclesql.Schema;
 
 /**
  *

@@ -5,9 +5,11 @@
  */
 package com.project.api.components;
 
-import com.project.api.managers.TableFieldManager;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -16,17 +18,19 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.SortType;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.TilePane;
 
+import com.project.api.managers.TableFieldManager;
 import com.project.api.models.Item;
 import com.project.api.oraclesql.Column;
 import com.project.api.translations.I18nUI;
 import com.project.api.translations.Translations;
 import com.project.api.utils.ClassUtils;
-import java.util.ArrayList;
-import javafx.scene.control.TableColumn;
 
 /**
  *
@@ -35,8 +39,11 @@ import javafx.scene.control.TableColumn;
 public class DataTable extends GridPane {
 
     private List<Item> items;
-    private List<TableColumn> tableColumns = new ArrayList<>();
-    private TableView table = new TableView();
+    private List<TableColumn<Item, ?>> tableColumns = new ArrayList<>();
+    private Map<Button, TableColumn<Item, ?>> tableColumnButtonMap = new LinkedHashMap<>();
+    private TilePane buttonPane = new TilePane();
+    
+    private TableView<Item> table = new TableView<>();
     private Footer footer = new Footer(table);
     private TextField searchField = new TextField();
 
@@ -44,6 +51,7 @@ public class DataTable extends GridPane {
 
     public DataTable(List<Item> items) {
         this.items = items;
+        table.setTableMenuButtonVisible(true);
 
         init();
     }
@@ -55,28 +63,69 @@ public class DataTable extends GridPane {
     private int getRecordsSize() {
         return items.size();
     }
+    
+    private void resetTableColumns() {
+    	tableColumns.clear();
+    	for(Button buttonKey : tableColumnButtonMap.keySet()) {
+    		tableColumns.add(tableColumnButtonMap.get(buttonKey));
+    	}
+    }
 
     public void addTableColumn(Column column) {
         Class<?> classDataType = ClassUtils.getWrapper(column);
 
+        TableColumn<Item, ?> tableColumn = null;
+        Button button = new Button(column.getColumnName());
         if (String.class.equals(classDataType)) {
-            tableColumns.add(tableFieldManager.getStringTableColumn(column.getColumnName()));
+        	tableColumn = tableFieldManager.getStringTableColumn(column.getColumnName());
         } else if (Character.class.equals(classDataType)) {
-            tableColumns.add(tableFieldManager.getCharacterTableColumn(column.getColumnName()));
+        	tableColumn = tableFieldManager.getCharacterTableColumn(column.getColumnName());
         } else if (Double.class.equals(classDataType)) {
-            tableColumns.add(tableFieldManager.getDoubleTableColumn(column.getColumnName()));
+        	tableColumn = tableFieldManager.getDoubleTableColumn(column.getColumnName());
         } else if (Long.class.equals(classDataType)) {
-            tableColumns.add(tableFieldManager.getLongTableColumn(column.getColumnName()));
+        	tableColumn = tableFieldManager.getLongTableColumn(column.getColumnName());
         } else if (Date.class.equals(classDataType)) {
-            tableColumns.add(tableFieldManager.getDateTableColumn(column.getColumnName()));
+        	tableColumn = tableFieldManager.getDateTableColumn(column.getColumnName());
         }
+        
+        if(column.getColumnName().toUpperCase().contains("ID")) {
+        	tableColumn.setSortType(SortType.ASCENDING);
+        }
+        
+        tableColumns.add(tableColumn);
+        button.setOnAction((ActionEvent e) -> {
+        	
+        });
+        tableColumnButtonMap.put(button, tableColumn);
     }
 
-    public List<TableColumn> getTableColumns() {
+    public List<TableColumn<Item, ?>> getTableColumns() {
         return tableColumns;
     }
+    
+    public Footer getFooter() {
+    	return footer;
+    }
+    
+	private class Pair<TableColumn, Boolean> {
+    	private TableColumn key;
+    	private Boolean value;
+    	
+    	public Pair(TableColumn key, Boolean value) {
+    		this.key = key;
+    		this.value = value;
+    	}
+    	
+    	public TableColumn getKey() {
+    		return key;
+    	}
+    	
+    	public Boolean getValue() {
+    		return value;
+    	}
+    }
 
-    private class Footer extends GridPane {
+    private class Footer extends TilePane {
 
         private ObservableList<Integer> noOfRecords = FXCollections.observableArrayList(5, 10, 50, 100, 200, 100);
 
@@ -96,11 +145,28 @@ public class DataTable extends GridPane {
         private int currentPage = 1;
 
         public Footer(TableView<Item> table) {
+        	setPrefColumns(3);
+        	
             this.table = table;
             init();
         }
 
         private void init() {
+        	GridPane gridPane = new GridPane();
+        	gridPane.add(entriesLabel, 0, 0);
+            getChildren().add(gridPane);
+            
+            gridPane = new GridPane();
+            pageOptions.valueProperty().addListener((ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) -> {
+                if (!oldValue.equals(newValue)) {
+                    setDefaultState(newValue);
+                }
+            });
+            gridPane.add(pageSizeLabel, 0, 0);
+            gridPane.add(pageOptions, 1, 0);
+            getChildren().add(gridPane);
+
+            gridPane = new GridPane();
             firstButton.setOnAction((ActionEvent e) -> {
                 currentPage = 1;
                 setCurrentPage(currentPage);
@@ -110,7 +176,7 @@ public class DataTable extends GridPane {
                         currentPage == getCurrentTotalPages(),
                         currentPage == getCurrentTotalPages());
             });
-            add(firstButton, 0, 0);
+            gridPane.add(firstButton, 0, 0);
 
             previousButton.setOnAction((ActionEvent e) -> {
                 currentPage--;
@@ -119,10 +185,9 @@ public class DataTable extends GridPane {
                 loadButtonState(currentPage == 1, currentPage == 1, false,
                         false);
             });
-            add(previousButton, 1, 0);
-
-            add(currentPageField, 2, 0);
-            add(totalPagesLabel, 3, 0);
+            gridPane.add(previousButton, 1, 0);
+            gridPane.add(currentPageField, 2, 0);
+            gridPane.add(totalPagesLabel, 3, 0);
 
             nextButton.setOnAction((ActionEvent e) -> {
                 currentPage++;
@@ -132,7 +197,7 @@ public class DataTable extends GridPane {
                         currentPage == getCurrentTotalPages(),
                         currentPage == getCurrentTotalPages());
             });
-            add(nextButton, 4, 0);
+            gridPane.add(nextButton, 4, 0);
 
             lastButton.setOnAction((ActionEvent e) -> {
                 currentPage = getCurrentTotalPages();
@@ -142,17 +207,8 @@ public class DataTable extends GridPane {
                         currentPage == getCurrentTotalPages(),
                         currentPage == getCurrentTotalPages());
             });
-            add(lastButton, 5, 0);
-
-            add(entriesLabel, 6, 0);
-            add(pageSizeLabel, 7, 0);
-
-            pageOptions.valueProperty().addListener((ObservableValue<? extends Integer> observable, Integer oldValue, Integer newValue) -> {
-                if (!oldValue.equals(newValue)) {
-                    setDefaultState(newValue);
-                }
-            });
-            add(pageOptions, 8, 0);
+            gridPane.add(lastButton, 5, 0);
+            getChildren().add(gridPane);
         }
 
         private void setDefaultState(Integer newValue) {
@@ -163,13 +219,13 @@ public class DataTable extends GridPane {
             } else {
                 pageOptions.setValue(newValue);
             }
+            totalPagesLabel.setText(String.valueOf(getRecordsSize() %  newValue == 0 ? getRecordsSize() / newValue : getRecordsSize() / newValue + 1));
             setCurrentPage(1);
         }
 
         private void loadTableContent() {
             List<Item> temp = new ArrayList<>();
-            for (int i = (currentPage - 1) * getCurrentPageSize(); i < currentPage
-                    * getCurrentPageSize(); i++) {
+            for (int i = (currentPage - 1) * getCurrentPageSize(); i < currentPage * getCurrentPageSize(); i++) {
                 if (items.get(i) != null) {
                     temp.add(items.get(i));
                 } else {
