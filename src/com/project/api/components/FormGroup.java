@@ -10,14 +10,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javafx.scene.control.TitledPane;
 import javafx.scene.layout.GridPane;
 
 /**
  *
  * @author Kim Howel delos Reyes
  */
-public class FormGroup extends GridPane {
+public class FormGroup extends TitledPane {
 
+	private GridPane grid = new GridPane();
+	
     private static final int DEFAULT_HORIZONTAL_GAP = 10;
     private static final int DEFAULT_VERTICAL_GAP = 10;
 
@@ -33,18 +36,29 @@ public class FormGroup extends GridPane {
     private FormGroup() {
         componentList = new ArrayList<>();
         componentMapping = new HashMap<>();
+        setText(caption);
     }
 
     public FormGroup(String caption, int noOfColumns) {
         this();
         this.caption = caption;
         this.noOfColumns = noOfColumns;
-        setVgap(DEFAULT_VERTICAL_GAP);
-        setHgap(DEFAULT_HORIZONTAL_GAP);
+        grid.setVgap(DEFAULT_VERTICAL_GAP);
+        grid.setHgap(DEFAULT_HORIZONTAL_GAP);
+    }
+    
+    /*
+     * Should always be called whenever FormGroup instance
+     * is to be added on another parent layout.
+     * 
+     * @return
+     * */
+    public void createForm() {
+    	setContent(grid);
     }
 
     public void addComponent(Component component) {
-        add(component, columnIndex++, rowIndex);
+    	grid.add(component, columnIndex++, rowIndex);
         if (columnIndex == noOfColumns) {
             columnIndex = 0;
             rowIndex = rowIndex + 1;

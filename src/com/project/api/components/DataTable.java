@@ -40,12 +40,17 @@ public class DataTable extends GridPane {
 
     private List<Item> items;
     private List<TableColumn<Item, ?>> tableColumns = new ArrayList<>();
-    private Map<Button, TableColumn<Item, ?>> tableColumnButtonMap = new LinkedHashMap<>();
+    private Map<Button, Pair<TableColumn<Item, ?>, Boolean>> tableColumnButtonMap = new LinkedHashMap<>();
     private TilePane buttonPane = new TilePane();
     
     private TableView<Item> table = new TableView<>();
     private Footer footer = new Footer(table);
     private TextField searchField = new TextField();
+    
+    private Button actionCSV = new Button();
+    private Button actionExcel = new Button();
+    private Button actionPDF = new Button();
+    private Button addNewRecord = new Button();
 
     private final TableFieldManager tableFieldManager = new TableFieldManager();
 
@@ -67,7 +72,9 @@ public class DataTable extends GridPane {
     private void resetTableColumns() {
     	tableColumns.clear();
     	for(Button buttonKey : tableColumnButtonMap.keySet()) {
-    		tableColumns.add(tableColumnButtonMap.get(buttonKey));
+    		if(tableColumnButtonMap.get(buttonKey).getValue()) {
+    			tableColumns.add(tableColumnButtonMap.get(buttonKey).getKey());
+    		}
     	}
     }
 
@@ -94,9 +101,10 @@ public class DataTable extends GridPane {
         
         tableColumns.add(tableColumn);
         button.setOnAction((ActionEvent e) -> {
-        	
+        	tableColumnButtonMap.get(button).setValue(!tableColumnButtonMap.get(button).getValue());
+        	resetTableColumns();
         });
-        tableColumnButtonMap.put(button, tableColumn);
+        tableColumnButtonMap.put(button, new Pair<TableColumn<Item, ?>, Boolean>(tableColumn, true));
     }
 
     public List<TableColumn<Item, ?>> getTableColumns() {
@@ -107,6 +115,7 @@ public class DataTable extends GridPane {
     	return footer;
     }
     
+	@SuppressWarnings("hiding")
 	private class Pair<TableColumn, Boolean> {
     	private TableColumn key;
     	private Boolean value;
@@ -122,6 +131,10 @@ public class DataTable extends GridPane {
     	
     	public Boolean getValue() {
     		return value;
+    	}
+    	
+    	public void setValue(Boolean value) {
+    		this.value = value;
     	}
     }
 
