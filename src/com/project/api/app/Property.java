@@ -5,10 +5,12 @@ public class Property {
     private static final String PATH = "resources/properties/";
     private static final String APPLICATION_PROPERTIES = "application.properties";
     private static final String CONFIGURATION_PROPERTIES = "config.properties";
+    private static final String TRANSLATIONS_PROPERTIES = "translations.properties";
 
     public enum PropertyPath {
         APPLICATION,
-        CONFIGURATION
+        CONFIGURATION,
+        TRANSLATION;
     }
 
     private String pathFile;
@@ -23,6 +25,8 @@ public class Property {
                 return new Property(PATH + APPLICATION_PROPERTIES);
             case CONFIGURATION:
                 return new Property(PATH + CONFIGURATION_PROPERTIES);
+            case TRANSLATION:
+            	return new Property(PATH + TRANSLATIONS_PROPERTIES);
         }
         return null;
     }

@@ -7,15 +7,16 @@ package com.project.api.translations;
 
 import java.util.ResourceBundle;
 
+import com.project.api.app.Property;
+import com.project.api.app.Property.PropertyPath;
+
 /**
  *
  * @author Kim Howel delos Reyes
  */
 public class I18nUI {
     
-    private static final String PATH = "resources/properties/";
-    private static final String TRANSLATIONS_PROPERTIES = "translations.properties";
-    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(PATH + TRANSLATIONS_PROPERTIES);
+    private static final ResourceBundle BUNDLE = ResourceBundle.getBundle(Property.getPropertyFile(PropertyPath.TRANSLATION).getPathFile());
     
     public static String getString(Translations key) {
         return BUNDLE.getString(key.name());
