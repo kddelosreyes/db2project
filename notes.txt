@@ -2,3 +2,5 @@
 2. Create ENTITY superclass for generic objects
 3. Refactor constants for models only.
 4. User must extends from ENTITY then add userid on refactor
+
+Visit http://javalite.io/netbeansIntegration to integrate JavaLite on Application
