@@ -5,8 +5,8 @@
  */
 package com.project.api.managers;
 
-import com.project.api.utils.NumberFormatUtils;
 import javafx.geometry.Pos;
+import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
@@ -14,6 +14,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
+
+import com.project.api.components.Component;
+import com.project.api.utils.NumberFormatUtils;
 
 /**
  *
@@ -27,6 +30,33 @@ public class FieldManager {
     
     public static final Font CAPTION_FONT = Font.font(FONT_FACE, FontWeight.NORMAL, CAPTION_FONT_SIZE);
     public static final Font COMPONENT_FONT = Font.font(FONT_FACE, FontWeight.NORMAL, FIELD_FONT_SIZE);
+    
+    public Component getComponentField(Component component) {
+    	Control control = null;
+    	switch (component.getTableColumn().getDataType()) {
+	        case VARCHAR2:
+	        case VARCHAR:
+	            control = getStringTextField();
+	            break;
+	        case CHAR:
+	            control = getCharTextField();
+	            break;
+	        case NUMBER:
+	            if (component.getTableColumn().getPrecision() != null && component.getTableColumn().getScale() != null) {
+	            	control = getDecimalTextField();
+	            } else {
+	            	control = getIntegerTextField();
+	            }
+	            break;
+	        case DATE:
+	            control = getDateField();
+	            break;
+	        default:
+	            control = null;
+	    }
+    	component.setComponentField(control);
+    	return component;
+    }
     
     public static TextField getStringTextField() {
         TextField textField = getTextField(false, null);

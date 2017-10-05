@@ -17,24 +17,17 @@ import javafx.scene.layout.GridPane;
  */
 public class Component extends GridPane {
 
-    private static Label labelCaption;
-    private static Control componentField;
+    private final Label labelCaption = new Label();
+    private Control componentField;
 
     private final String caption;
     private final Column tableColumn;
 
     private void init() {
-        labelCaption = initializeLabel();
-        componentField = initializeComponentField();
+        labelCaption.setText(caption);
+        labelCaption.setFont(FieldManager.CAPTION_FONT);
 
         add(labelCaption, 0, 0);
-        add(componentField, 0, 1);
-    }
-
-    private Label initializeLabel() {
-        Label label = new Label(caption);
-        label.setFont(FieldManager.CAPTION_FONT);
-        return label;
     }
 
     public Component(String caption, Column tableColumn) {
@@ -47,24 +40,14 @@ public class Component extends GridPane {
     public String getCaption() {
         return caption;
     }
-
-    private Control initializeComponentField() {
-        switch (tableColumn.getDataType()) {
-            case VARCHAR2:
-            case VARCHAR:
-                return FieldManager.getStringTextField();
-            case CHAR:
-                return FieldManager.getCharTextField();
-            case NUMBER:
-                if (tableColumn.getPrecision() != null && tableColumn.getScale() != null) {
-                    return FieldManager.getDecimalTextField();
-                }
-                return FieldManager.getIntegerTextField();
-            case DATE:
-                return FieldManager.getDateField();
-            default:
-                return null;
-        }
+    
+    public Column getTableColumn() {
+    	return tableColumn;
+    }
+    
+    public void setComponentField(Control componentField) {
+    	this.componentField = componentField;
+    	add(componentField, 0, 1);
     }
 
     public void setEditable(boolean isEditable) {
