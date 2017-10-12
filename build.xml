@@ -11,7 +11,7 @@
     <description>Builds, tests, and runs the project ProjectAPI.</description>
     <import file="nbproject/build-impl.xml"/>
 	
-	<target name="-post-compile">
+	<!--<target name="-post-compile">
 		<java classname="org.javalite.instrumentation.Main" failonerror="true">
 			<sysproperty key="outputDirectory" value="${build.classes.dir}"/>
 			<classpath>
@@ -20,7 +20,7 @@
 				<pathelement path="${javac.processorpath}" />
 			</classpath>
 		</java>
-	</target>
+	</target>-->
  
     <!--
 
