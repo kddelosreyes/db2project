@@ -5,11 +5,13 @@
  */
 package com.project.api.models.user;
 
+import com.project.api.models.Attribute;
+
 /**
  *
  * @author Kim Howel delos Reyes
  */
-public enum UserAttribute {
+public enum UserAttribute implements Attribute {
 
     ATTRIBUTE_USER_ID,
     ATTRIBUTE_USER_NAME,
