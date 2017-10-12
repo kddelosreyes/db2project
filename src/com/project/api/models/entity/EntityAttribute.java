@@ -3,20 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.project.api.models;
+package com.project.api.models.entity;
+
+import com.project.api.models.Attribute;
 
 /**
  *
  * @author Kim Howel delos Reyes
  */
-public class Entity {
+public enum EntityAttribute implements Attribute {
     
-    private String description;
-    
-    public Entity(String description) {
-        this.description = description;
-    }
-    
-    
+    ENTITY_ATTRIBUTE_DESCRIPTION;
     
 }

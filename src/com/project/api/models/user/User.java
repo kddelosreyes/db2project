@@ -74,14 +74,19 @@ public class User implements Model {
         switch (attrib) {
             case ATTRIBUTE_USER_ID:
                 setId((Integer) value);
+                break;
             case ATTRIBUTE_USER_NAME:
                 setUsername((String) value);
+                break;
             case ATTRIBUTE_USER_PASSWORD:
                 setPassword((String) value);
+                break;
             case ATTRIBUTE_USER_LAST_LOGIN_DATE:
                 setLastLoginDate((Date) value);
+                break;
             case ATTRIBUTE_LOCALE:
             	setLocale((Locale) value);
+                break;
         }
     }
 
