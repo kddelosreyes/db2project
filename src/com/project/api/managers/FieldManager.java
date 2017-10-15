@@ -16,6 +16,7 @@ import javafx.util.converter.DoubleStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 
 import com.project.api.components.Component;
+import com.project.api.oraclesql.Column;
 import com.project.api.utils.NumberFormatUtils;
 
 /**
@@ -27,37 +28,41 @@ public class FieldManager {
     private static final String FONT_FACE = "Arial";
     private static final int CAPTION_FONT_SIZE = 8;
     private static final int FIELD_FONT_SIZE = 13;
-    
+
     public static final Font CAPTION_FONT = Font.font(FONT_FACE, FontWeight.NORMAL, CAPTION_FONT_SIZE);
     public static final Font COMPONENT_FONT = Font.font(FONT_FACE, FontWeight.NORMAL, FIELD_FONT_SIZE);
-    
-    public Component getComponentField(Component component) {
-    	Control control = null;
-    	switch (component.getTableColumn().getDataType()) {
-	        case VARCHAR2:
-	        case VARCHAR:
-	            control = getStringTextField();
-	            break;
-	        case CHAR:
-	            control = getCharTextField();
-	            break;
-	        case NUMBER:
-	            if (component.getTableColumn().getPrecision() != null && component.getTableColumn().getScale() != null) {
-	            	control = getDecimalTextField();
-	            } else {
-	            	control = getIntegerTextField();
-	            }
-	            break;
-	        case DATE:
-	            control = getDateField();
-	            break;
-	        default:
-	            control = null;
-	    }
-    	component.setComponentField(control);
-    	return component;
+
+    public Component getComponentField(String caption, Column column) {
+        return getComponentField(new Component(caption, column));
     }
     
+    public Component getComponentField(Component component) {
+        Control control = null;
+        switch (component.getTableColumn().getDataType()) {
+            case VARCHAR2:
+            case VARCHAR:
+                control = getStringTextField();
+                break;
+            case CHAR:
+                control = getCharTextField();
+                break;
+            case NUMBER:
+                if (component.getTableColumn().getPrecision() != null && component.getTableColumn().getScale() != null) {
+                    control = getDecimalTextField();
+                } else {
+                    control = getIntegerTextField();
+                }
+                break;
+            case DATE:
+                control = getDateField();
+                break;
+            default:
+                control = null;
+        }
+        component.setComponentField(control);
+        return component;
+    }
+
     public static TextField getStringTextField() {
         TextField textField = getTextField(false, null);
         textField.setAlignment(Pos.CENTER_LEFT);
@@ -100,5 +105,5 @@ public class FieldManager {
         textField.setFont(COMPONENT_FONT);
         return textField;
     }
-    
+
 }

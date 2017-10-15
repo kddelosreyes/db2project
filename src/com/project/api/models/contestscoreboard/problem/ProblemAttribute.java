@@ -3,18 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.project.api.models.user;
+package com.project.api.models.problem;
+
+import com.project.api.models.Attribute;
 
 /**
  *
  * @author Kim Howel delos Reyes
  */
-public enum UserAttribute {
-
-    ATTRIBUTE_USER_ID,
-    ATTRIBUTE_USER_NAME,
-    ATTRIBUTE_USER_PASSWORD,
-    ATTRIBUTE_USER_LAST_LOGIN_DATE,
-    ATTRIBUTE_LOCALE;
-
+public enum ProblemAttribute implements Attribute {
+    
+    ATTRIBUTE_PROBLEM_ID,
+    ATTRIBUTE_PROBLEM_LETTER,
+    ATTRIBUTE_PROBLEM_NAME;
+    
 }
