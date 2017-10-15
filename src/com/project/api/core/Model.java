@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.project.api.models.problem;
+package com.project.api.core;
 
 import com.project.api.models.Attribute;
 
@@ -11,10 +11,10 @@ import com.project.api.models.Attribute;
  *
  * @author Kim Howel delos Reyes
  */
-public enum ProblemAttribute implements Attribute {
+public interface Model {
     
-    ATTRIBUTE_PROBLEM_ID,
-    ATTRIBUTE_PROBLEM_LETTER,
-    ATTRIBUTE_PROBLEM_NAME;
+    public Object getAttribute(Attribute attribute);
+    
+    public void setAttribute(Attribute attribute, Object value);
     
 }

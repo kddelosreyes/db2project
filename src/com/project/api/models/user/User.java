@@ -6,7 +6,7 @@
 package com.project.api.models.user;
 
 import com.project.api.models.Attribute;
-import com.project.api.models.Model;
+import com.project.api.core.Model;
 import java.util.Date;
 import java.util.Locale;
 

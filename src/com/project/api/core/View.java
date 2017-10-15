@@ -3,18 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.project.api.models.problem;
+package com.project.api.core;
 
-import com.project.api.models.Attribute;
+import javafx.scene.control.Control;
 
 /**
  *
  * @author Kim Howel delos Reyes
  */
-public enum ProblemAttribute implements Attribute {
-    
-    ATTRIBUTE_PROBLEM_ID,
-    ATTRIBUTE_PROBLEM_LETTER,
-    ATTRIBUTE_PROBLEM_NAME;
+public interface View {
+
+    public Control getControl();
     
 }

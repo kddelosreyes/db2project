@@ -28,12 +28,11 @@ public class Submission extends EntityLongId {
         SUBMISSION_ERROR;
     }
     
-    private static Long submissionId = 1L;
-    private final Long timeSubmitted;
-    private final Verdict verdict;
+    private Long timeSubmitted;
+    private Verdict verdict;
     
-    public Submission(Long timeSubmitted, Verdict verdict) {
-        super(submissionId++, verdict.name() + ":" + timeSubmitted);
+    public Submission(Long id, Long timeSubmitted, Verdict verdict) {
+        super(id, verdict.name() + ":" + timeSubmitted);
         this.timeSubmitted = timeSubmitted;
         this.verdict = verdict;
     }
@@ -59,4 +58,24 @@ public class Submission extends EntityLongId {
         return timeSubmitted;
     }
     
+    @Override
+    public void setAttribute(Attribute attribute, Object value) {
+        SubmissionAttribute attrib = (SubmissionAttribute) attribute;
+        switch(attrib) {
+            case ATTRIBUTE_SUBMISSION_VERDICT:
+                setVerdict((Verdict) value);
+                break;
+            case ATTRIBUTE_SUBMISSION_TIME:
+                setSubmissionTime((Long) value);
+                break;
+        }
+    }
+    
+    private void setVerdict(Verdict verdict) {
+        this.verdict = verdict;
+    }
+    
+    private void setSubmissionTime(Long timeSubmitted) {
+        this.timeSubmitted = timeSubmitted;
+    }
 }

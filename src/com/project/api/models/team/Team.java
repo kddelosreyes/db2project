@@ -23,15 +23,14 @@ import java.util.Map;
  */
 public class Team extends EntityLongId {
 
-    private static Long teamId = 1000L;
     private final Long PENALTY_MINUTE = 20L;
     private String schoolName;
     private String teamName;
     private final Map<Problem, List<Submission>> submissions;
     private final Map<Problem, Long> problemsSolved;
 
-    public Team(String teamName, String schoolName) {
-        super(teamId++, teamName + ":" + schoolName);
+    public Team(Long id, String teamName, String schoolName) {
+        super(id, teamName + ":" + schoolName);
         this.schoolName = schoolName;
         this.teamName = teamName;
         submissions = new HashMap<>();

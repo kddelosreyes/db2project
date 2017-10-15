@@ -7,7 +7,7 @@ package com.project.api.controllers;
 
 /**
  *
- * @author ieyangco
+ * @author Kim Howel delos Reyes
  */
 public class SubmissionController {
     
