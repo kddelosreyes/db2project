@@ -3,19 +3,20 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.project.api.models.contest;
+package com.project.api.models.contestscoreboard.contest;
 
-import com.project.api.models.Attribute;
-import com.project.api.models.entity.EntityAttribute;
-import com.project.api.models.entitylongid.EntityLongId;
-import com.project.api.models.entitylongid.EntityLongIdAttribute;
-import com.project.api.models.problem.Problem;
-import com.project.api.models.submission.Submission;
-import com.project.api.models.team.Team;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.project.api.models.Attribute;
+import com.project.api.models.contestscoreboard.entity.EntityAttribute;
+import com.project.api.models.contestscoreboard.entitylongid.EntityLongId;
+import com.project.api.models.contestscoreboard.entitylongid.EntityLongIdAttribute;
+import com.project.api.models.contestscoreboard.problem.Problem;
+import com.project.api.models.contestscoreboard.submission.Submission;
+import com.project.api.models.contestscoreboard.team.Team;
 
 /**
  *

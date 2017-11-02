@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.project.api.models.problem;
+package com.project.api.models.contestscoreboard.problem;
 
 import com.project.api.models.Attribute;
 

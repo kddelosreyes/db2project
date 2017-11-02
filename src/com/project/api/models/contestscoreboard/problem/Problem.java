@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.project.api.models.problem;
+package com.project.api.models.contestscoreboard.problem;
 
 import com.project.api.models.Attribute;
-import com.project.api.models.entity.EntityAttribute;
-import com.project.api.models.entitycharid.EntityCharIdAttribute;
-import com.project.api.models.entitylongid.EntityLongId;
+import com.project.api.models.contestscoreboard.entity.EntityAttribute;
+import com.project.api.models.contestscoreboard.entitycharid.EntityCharIdAttribute;
+import com.project.api.models.contestscoreboard.entitylongid.EntityLongId;
 
 /**
  *

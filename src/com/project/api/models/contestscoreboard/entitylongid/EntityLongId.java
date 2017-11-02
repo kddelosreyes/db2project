@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.project.api.models.entitylongid;
+package com.project.api.models.contestscoreboard.entitylongid;
 
 import com.project.api.models.Attribute;
-import com.project.api.models.entity.Entity;
+import com.project.api.models.contestscoreboard.entity.Entity;
 
 /**
  *

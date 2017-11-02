@@ -1,8 +1,8 @@
-package com.project.api.models.submission;
+package com.project.api.models.contestscoreboard.submission;
 
 
 import com.project.api.models.Attribute;
-import com.project.api.models.entitylongid.EntityLongId;
+import com.project.api.models.contestscoreboard.entitylongid.EntityLongId;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
